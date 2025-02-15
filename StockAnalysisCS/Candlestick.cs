@@ -36,6 +36,42 @@ namespace StockAnalysisCS
 
             // Split the row of data into an array of string tokens using the separators and removing empty tokens
             string[] tokens = rowOfData.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+
+            // Get the date string from the first token
+            string dateString = tokens[0];
+            // Parse the date string into a DateTime object and assign it to the date property
+            date = DateTime.Parse(dateString);
+
+            // Declare a temporary variable to store the parsed decimal value
+            decimal temp;
+
+            // Try to parse the second token as a decimal
+            bool success = decimal.TryParse(tokens[1], out temp);
+            // If parsing was successful, assign the value to the open price property
+            if (success) open = temp;
+
+            // Try to parse the third token as a decimal
+            success = decimal.TryParse(tokens[2], out temp);
+            // If parsing was successful, assign the value to the high price property
+            if (success) high = temp;
+
+            // Try to parse the fourth token as a decimal
+            success = decimal.TryParse(tokens[3], out temp);
+            // If parsing was successful, assign the value to the low price property
+            if (success) low = temp;
+
+            // Try to parse the fifth token as a decimal
+            success = decimal.TryParse(tokens[4], out temp);
+            // If parsing was successful, assign the value to the close price property
+            if (success) close = temp;
+
+            // Declare a temporary variable to store the parsed ulong value
+            ulong parsedVolume;
+
+            // Try to parse the sixth token as a ulong
+            success = ulong.TryParse(tokens[5], out parsedVolume);
+            // If parsing was successful, assign the value to the volume property
+            if (success) volume = parsedVolume;
         }
     }
 }

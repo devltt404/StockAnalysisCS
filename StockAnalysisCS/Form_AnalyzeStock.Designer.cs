@@ -34,9 +34,10 @@
             // 
             // button_loadTicker
             // 
-            this.button_loadTicker.Location = new System.Drawing.Point(70, 71);
+            this.button_loadTicker.Location = new System.Drawing.Point(47, 46);
+            this.button_loadTicker.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button_loadTicker.Name = "button_loadTicker";
-            this.button_loadTicker.Size = new System.Drawing.Size(203, 69);
+            this.button_loadTicker.Size = new System.Drawing.Size(135, 45);
             this.button_loadTicker.TabIndex = 0;
             this.button_loadTicker.Text = "Load Ticker";
             this.button_loadTicker.UseVisualStyleBackColor = true;
@@ -50,11 +51,10 @@
             // 
             // Form_AnalyzeStock
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 692);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.button_loadTicker);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form_AnalyzeStock";
             this.Text = "Form_AnalyzeStock";
             this.ResumeLayout(false);
