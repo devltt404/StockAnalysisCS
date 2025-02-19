@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.button_loadTicker = new System.Windows.Forms.Button();
             this.openFileDialog_loadTicker = new System.Windows.Forms.OpenFileDialog();
             this.dateTimePicker_startDate = new System.Windows.Forms.DateTimePicker();
@@ -75,6 +75,7 @@
             this.dateTimePicker_startDate.Name = "dateTimePicker_startDate";
             this.dateTimePicker_startDate.Size = new System.Drawing.Size(183, 20);
             this.dateTimePicker_startDate.TabIndex = 1;
+            this.dateTimePicker_startDate.Value = new System.DateTime(2024, 1, 1, 0, 0, 0, 0);
             this.dateTimePicker_startDate.ValueChanged += new System.EventHandler(this.dateTimePicker_startDate_ValueChanged);
             // 
             // dateTimePicker_endDate
@@ -112,34 +113,34 @@
             // 
             // chart_stockData
             // 
-            chartArea1.Name = "ChartArea_OHLC";
-            chartArea2.Name = "ChartArea_Volume";
-            this.chart_stockData.ChartAreas.Add(chartArea1);
-            this.chart_stockData.ChartAreas.Add(chartArea2);
-            legend1.Name = "Legend1";
-            this.chart_stockData.Legends.Add(legend1);
+            chartArea5.Name = "ChartArea_OHLC";
+            chartArea6.Name = "ChartArea_Volume";
+            this.chart_stockData.ChartAreas.Add(chartArea5);
+            this.chart_stockData.ChartAreas.Add(chartArea6);
+            legend3.Name = "Legend1";
+            this.chart_stockData.Legends.Add(legend3);
             this.chart_stockData.Location = new System.Drawing.Point(35, 196);
             this.chart_stockData.Margin = new System.Windows.Forms.Padding(2);
             this.chart_stockData.Name = "chart_stockData";
-            series1.ChartArea = "ChartArea_OHLC";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick;
-            series1.CustomProperties = "PriceDownColor=Red, PriceUpColor=Green";
-            series1.Legend = "Legend1";
-            series1.Name = "Series_OHLC";
-            series1.XValueMember = "Date";
-            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
-            series1.YValueMembers = "High,Low,Open,Close";
-            series1.YValuesPerPoint = 4;
-            series1.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
-            series2.ChartArea = "ChartArea_Volume";
-            series2.Legend = "Legend1";
-            series2.Name = "Series_Volume";
-            series2.XValueMember = "Date";
-            series2.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
-            series2.YValueMembers = "Volume";
-            series2.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
-            this.chart_stockData.Series.Add(series1);
-            this.chart_stockData.Series.Add(series2);
+            series5.ChartArea = "ChartArea_OHLC";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick;
+            series5.CustomProperties = "PriceDownColor=Red, PriceUpColor=Green";
+            series5.Legend = "Legend1";
+            series5.Name = "Series_OHLC";
+            series5.XValueMember = "Date";
+            series5.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
+            series5.YValueMembers = "High,Low,Open,Close";
+            series5.YValuesPerPoint = 4;
+            series5.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
+            series6.ChartArea = "ChartArea_Volume";
+            series6.Legend = "Legend1";
+            series6.Name = "Series_Volume";
+            series6.XValueMember = "Date";
+            series6.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
+            series6.YValueMembers = "Volume";
+            series6.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
+            this.chart_stockData.Series.Add(series5);
+            this.chart_stockData.Series.Add(series6);
             this.chart_stockData.Size = new System.Drawing.Size(1017, 271);
             this.chart_stockData.TabIndex = 5;
             this.chart_stockData.Text = "chart_stockData";

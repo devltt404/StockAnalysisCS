@@ -29,10 +29,6 @@ namespace StockAnalysisCS
             candlesticks = new List<Candlestick>();
             // Initialize the filtered candlesticks list
             filteredCandlesticks = new List<Candlestick>();
-            // Set the end date of the date picker to the current date
-            dateTimePicker_endDate.Value = DateTime.Now;
-            // Set the start date of the date picker to 2 years before the current date
-            dateTimePicker_startDate.Value = DateTime.Now.Date.AddYears(-2);
         }
 
         /// <summary>
