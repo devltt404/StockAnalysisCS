@@ -32,10 +32,6 @@ namespace StockAnalysisCS
             dateTimePicker_endDate.Value = DateTime.Now;
             // Set the start date of the date picker to 2 years before the current date
             dateTimePicker_startDate.Value = DateTime.Now.Date.AddYears(-2);
-            // Set the default selected index of the symbol combo box to 0 (All)
-            comboBox_symbol.SelectedIndex = 0;
-            // Set the default selected index of the period combo box to 0 (Day)
-            comboBox_period.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -45,8 +41,6 @@ namespace StockAnalysisCS
         /// <param name="e"></param>
         private void button_loadTicker_Click(object sender, EventArgs e)
         {
-            // Define the filter for the OpenFileDialog based on the selected symbol and period
-            defineOpenFileDialogFilter();
             // Display the OpenFileDialog to allow the user to select a ticker file
             openFileDialog_loadTicker.ShowDialog();
         }
@@ -186,66 +180,6 @@ namespace StockAnalysisCS
             // Set the data source of the DataGridView to the filtered candlesticks list
             dataGridView_stockData.DataSource = filteredCandlesticks;
         }
-
-        /// <summary>
-        /// Function to define the filter for the OpenFileDialog based on the selected symbol and period
-        /// </summary>
-        private void defineOpenFileDialogFilter()
-        {
-            // Check if the symbol or period is not selected
-            if (comboBox_symbol.SelectedItem == null || comboBox_period.SelectedItem == null)
-            {
-                // Show an error message
-                MessageBox.Show("Please select a symbol and a period.");
-                // Exit function
-                return;
-            }
-
-            // Get the selected symbol
-            string symbol = comboBox_symbol.SelectedItem.ToString();
-            // Get the selected period
-            string period = comboBox_period.SelectedItem.ToString();
-
-            // Define the period filter based on the selected period
-            string periodFilter;
-
-            // Set the period filter based on the selected period
-            switch (period)
-            {
-                // Case for "Daily" period
-                case "Daily":
-                    // Filter for daily data files
-                    periodFilter = "-Day.csv";
-                    break;
-                // Case for "Weekly" period
-                case "Weekly":
-                    // Filter for weekly data files
-                    periodFilter = "-Week.csv";
-                    break;
-                // Case for "Monthly" period
-                case "Monthly":
-                    // Filter for monthly data files
-                    periodFilter = "-Month.csv";
-                    break;
-                // Default case for "All" period
-                default:
-                    // Filter for data files of all periods
-                    periodFilter = "-*.csv";
-                    break;
-            }
-
-            // Define the file filter based on the selected symbol and period
-            string fileFilter = $"{(symbol == "All" ? "*" : symbol)}{periodFilter}";
-
-            // Define the filtered symbol label based on the selected symbol
-            string symbolLabel = (symbol == "All") ? "All Symbols" : symbol;
-            // Define the filtered period label based on the selected period
-            string periodLabel = (period == "All") ? "All Periods" : period;
-
-            // Set the filter for the OpenFileDialog based on the selected symbol and period
-            openFileDialog_loadTicker.Filter = $"{symbolLabel} - {periodLabel} ({fileFilter})|{fileFilter}";
-        }
-
 
         /// <summary>
         /// Function to handle the event when the user selects a date in the start date picker
