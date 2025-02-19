@@ -23,6 +23,7 @@ namespace StockAnalysisCS
 
         public Form_AnalyzeStock()
         {
+            // Initialize the form components
             InitializeComponent();
             // Initialize the candlesticks list
             candlesticks = new List<Candlestick>();

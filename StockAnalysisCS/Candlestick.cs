@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace StockAnalysisCS
 {
+    // 
     internal class Candlestick
     {
         // Property to store the date of the candlestick
