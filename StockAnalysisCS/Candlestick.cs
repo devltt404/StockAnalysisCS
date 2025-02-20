@@ -9,7 +9,6 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace StockAnalysisCS
 {
-    // 
     internal class Candlestick
     {
         // Property to store the date of the candlestick

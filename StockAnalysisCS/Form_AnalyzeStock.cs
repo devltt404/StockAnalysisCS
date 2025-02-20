@@ -54,14 +54,8 @@ namespace StockAnalysisCS
 
             // Read the candlestick data from the selected file
             readCandlesticksFromFile();
-            // Filter the candlesticks based on the user-selected date range
-            filterCandlesticks();
-            // Normalize the y-axis of the chart to fit the candlesticks data
-            normalizeChart();
-            // Display the candlestick data in the chart
-            displayChart();
-            // Display the candlestick data in the DataGridView
-            displayDataGridView();
+            // Display the stock data based on the user-selected date range
+            displayStockData();
         }
 
         /// <summary>
@@ -185,14 +179,8 @@ namespace StockAnalysisCS
         /// <param name="e"></param>
         private void dateTimePicker_startDate_ValueChanged(object sender, EventArgs e)
         {
-            // Filter the candlesticks based on the user-selected date range
-            filterCandlesticks();
-            // Normalize the y-axis of the chart to fit the candlesticks data
-            normalizeChart();
-            // Display the candlestick data in the chart
-            displayChart();
-            // Display the candlestick data in the DataGridView
-            displayDataGridView();
+            // Display stock data based on the user-selected date range
+            displayStockData();
         }
 
         /// <summary>
@@ -202,14 +190,36 @@ namespace StockAnalysisCS
         /// <param name="e"></param>
         private void dateTimePicker_endDate_ValueChanged(object sender, EventArgs e)
         {
+            // Display stock data based on the user-selected date range
+            displayStockData();
+        }
+
+        /// <summary>
+        /// Calls functions to filter candlesticks, reset, and update the chart and DataGridView.
+        /// </summary>
+        private void displayStockData()
+        {
             // Filter the candlesticks based on the user-selected date range
             filterCandlesticks();
-            // Normalize the y-axis of the chart to fit the candlesticks data
-            normalizeChart();
-            // Display the candlestick data in the chart
-            displayChart();
-            // Display the candlestick data in the DataGridView
-            displayDataGridView();
+
+            // Clear existing data in the chart
+            chart_stockData.Series["Series_OHLC"].Points.Clear();
+            chart_stockData.Series["Series_Volume"].Points.Clear();
+
+            // Reset DataGridView data source
+            dataGridView_stockData.DataSource = null;
+
+            // Check if there are candlesticks within the date range to display
+            if (filteredCandlesticks.Count > 0)
+            {
+                // Normalize the y-axis of the chart to fit the candlesticks data
+                normalizeChart();
+                // Display the candlestick data in the chart
+                displayChart();
+                // Display the candlestick data in the DataGridView
+                displayDataGridView();
+            }
         }
+
     }
 }
