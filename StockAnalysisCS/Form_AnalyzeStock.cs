@@ -34,8 +34,8 @@ namespace StockAnalysisCS
         /// <summary>
         /// Function to handle the click event of the button_loadTicker
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
         private void button_loadTicker_Click(object sender, EventArgs e)
         {
             // Display the OpenFileDialog to allow the user to select a ticker file
@@ -45,8 +45,8 @@ namespace StockAnalysisCS
         /// <summary>
         /// Function to handle the event after user selects a ticker file in the OpenFileDialog
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
         private void openFileDialog_loadTicker_FileOk(object sender, CancelEventArgs e)
         {
             // Set the title of the form to the name of the selected file
@@ -166,8 +166,8 @@ namespace StockAnalysisCS
         /// <summary>
         /// Function to handle the event when the user selects a date in the start date picker
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
         private void dateTimePicker_startDate_ValueChanged(object sender, EventArgs e)
         {
             // Display stock data based on the user-selected date range
@@ -177,8 +177,8 @@ namespace StockAnalysisCS
         /// <summary>
         /// Function to handle the event when the user selects a date in the end date picker
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
         private void dateTimePicker_endDate_ValueChanged(object sender, EventArgs e)
         {
             // Display stock data based on the user-selected date range
