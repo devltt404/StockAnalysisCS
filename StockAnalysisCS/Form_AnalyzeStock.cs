@@ -98,6 +98,14 @@ namespace StockAnalysisCS
                     candlesticks.Add(candlestick);
                 }
             }
+
+            // Check if there are at least two candlesticks in the list 
+            // and the first candlestick date is greater than the second candlestick date
+            if (candlesticks.Count >=2 && candlesticks[0].date > candlesticks[1].date)
+            {
+                // Reverse the order of the candlesticks
+                candlesticks.Reverse();
+            }
         }
 
         /// <summary>
@@ -113,13 +121,6 @@ namespace StockAnalysisCS
             // Use LINQ to filter candlesticks within the date range
             // and assign the result to the filteredCandlesticks list
             filteredCandlesticks = candlesticks.Where(c => c.date >= startDate && c.date <= endDate).ToList();
-
-            // Check if the first candlestick date is greater than the second candlestick date
-            if (filteredCandlesticks[0].date > filteredCandlesticks[1].date)
-            {
-                // Reverse the order of the filtered candlesticks
-                filteredCandlesticks.Reverse();
-            }
         }
 
         /// <summary>
