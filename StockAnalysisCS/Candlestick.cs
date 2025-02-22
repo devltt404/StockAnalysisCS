@@ -9,6 +9,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace StockAnalysisCS
 {
+    // Candlestick class to store the OHLCV data for a stock on a particular day
     internal class Candlestick
     {
         // Property to store the date of the candlestick
