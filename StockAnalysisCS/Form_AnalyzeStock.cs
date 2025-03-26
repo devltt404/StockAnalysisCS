@@ -32,6 +32,33 @@ namespace StockAnalysisCS
         }
 
         /// <summary>
+        /// Constructor to create a new instance of the Form_AnalyzeStock class
+        /// with specified ticker file name, start date, and end date
+        /// </summary>
+        /// <param name="tickerFileName">The ticker filename</param>
+        /// <param name="start">The start date for candlesticks filtering</param>
+        /// <param name="end">The end date for candlesticks filtering</param>
+        public Form_AnalyzeStock(string tickerFileName, DateTime start, DateTime end)
+        {
+            // Initialize the form components
+            InitializeComponent();
+            // Initialize the candlesticks list
+            candlesticks = new List<Candlestick>();
+            // Initialize the filtered candlesticks list
+            filteredCandlesticks = new List<Candlestick>();
+
+            // Set the start date picker value to the specified start date
+            dateTimePicker_startDate.Value = start;
+            // Set the end date picker value to the specified end date
+            dateTimePicker_endDate.Value = end;
+
+            // Read the candlestick data from the selected file
+            readCandlesticksFromFile(tickerFileName);
+            // Display the stock data based on the user-selected date range
+            displayStockData();
+        }
+
+        /// <summary>
         /// Function to handle the click event of the button_loadTicker
         /// </summary>
         /// <param name="sender">The control that triggered the event</param>
@@ -49,23 +76,50 @@ namespace StockAnalysisCS
         /// <param name="e">Event data</param>
         private void openFileDialog_loadTicker_FileOk(object sender, CancelEventArgs e)
         {
-            // Set the title of the form to the name of the selected file
-            Text = Path.GetFileNameWithoutExtension(openFileDialog_loadTicker.FileName);
+            // Get the number of files selected in the OpenFileDialog
+            int numFiles = openFileDialog_loadTicker.FileNames.Count();
+            // Get the start date selected by the user
+            DateTime startDate = dateTimePicker_startDate.Value;
+            // Get the end date selected by the user
+            DateTime endDate = dateTimePicker_endDate.Value;
 
-            // Read the candlestick data from the selected file
-            readCandlesticksFromFile();
-            // Display the stock data based on the user-selected date range
-            displayStockData();
+            // Loop through the selected files
+            for (int i = 0; i < numFiles; i++)
+            {
+                // Get the file name
+                string fileName = openFileDialog_loadTicker.FileNames[i];
+                // Get the name of ticker from the current file name
+                string tickerName = Path.GetFileNameWithoutExtension(fileName);
+                // Declare a form to display and analyze stock data
+                Form_AnalyzeStock analyzeStockForm;
+
+                // Check if the current file is the first file selected
+                if (i == 0)
+                {
+                    // Use the current form to display and analyze stock data of the first file
+                    analyzeStockForm = this;
+                    // Read the candlestick data from the selected file
+                    readCandlesticksFromFile(fileName);
+                    // Display the stock data based on the user-selected date range
+                    displayStockData();
+                } else
+                {
+                    analyzeStockForm = new Form_AnalyzeStock(fileName, startDate, endDate);
+                }
+
+                // Set the title of the form to the ticker name
+                analyzeStockForm.Text = tickerName;
+                // Show the form
+                analyzeStockForm.Show();
+            }
         }
 
         /// <summary>
         /// Function to read candlestick data from the selected file and store it in a list
         /// </summary>
-        private void readCandlesticksFromFile()
+        /// <param name="fileName">The filename of selected file</param>
+        private void readCandlesticksFromFile(string fileName)
         {
-            // Get the file name selected in the OpenFileDialog
-            string fileName = openFileDialog_loadTicker.FileName;
-
             // Declare the expected header row (first line) of the CSV file
             const string expectedHeader = "\"Date\",\"Open\",\"High\",\"Low\",\"Close\",\"Volume\"";
 
@@ -98,7 +152,6 @@ namespace StockAnalysisCS
                     candlesticks.Add(candlestick);
                 }
             }
-
             // Check if there are at least two candlesticks in the list 
             // and the first candlestick date is greater than the second candlestick date
             if (candlesticks.Count >=2 && candlesticks[0].date > candlesticks[1].date)
@@ -163,15 +216,6 @@ namespace StockAnalysisCS
         }
 
         /// <summary>
-        /// Function to display the stock data (OHLCV) in a DataGridView
-        /// </summary>
-        private void displayDataGridView()
-        {
-            // Set the data source of the DataGridView to the filtered candlesticks list
-            dataGridView_stockData.DataSource = filteredCandlesticks;
-        }
-
-        /// <summary>
         /// Function to handle the event when the user selects a date in the start date picker
         /// </summary>
         /// <param name="sender">The control that triggered the event</param>
@@ -194,7 +238,7 @@ namespace StockAnalysisCS
         }
 
         /// <summary>
-        /// Calls functions to filter candlesticks, reset, and update the chart and DataGridView.
+        /// Calls functions to filter candlesticks, reset, and update the chart.
         /// </summary>
         private void displayStockData()
         {
@@ -206,9 +250,6 @@ namespace StockAnalysisCS
             // Clear existing Volume data in the chart 
             chart_stockData.Series["Series_Volume"].Points.Clear();
 
-            // Reset DataGridView data source
-            dataGridView_stockData.DataSource = null;
-
             // Check if there are candlesticks within the date range to display
             if (filteredCandlesticks.Count > 0)
             {
@@ -216,9 +257,123 @@ namespace StockAnalysisCS
                 normalizeChart();
                 // Display the candlestick data in the chart
                 displayChart();
-                // Display the candlestick data in the DataGridView
-                displayDataGridView();
+                // Detect peaks and valleys in the candlestick data
+                detectPeakAndValley();
             }
         }
+
+        /// <summary>
+        /// Function to add an arrow annotation for a peak or valley in the chart
+        /// </summary>
+        /// <param name="i">The index of the candlestick in the filtered candlesticks list that is peak or valley</param>
+        /// <param name="isPeak">The boolean value indicating if the candlestick is a peak or valley</param>
+        private void addPeakValleyAnnotation(int i, Boolean isPeak)
+        {
+            // Get the data point at the specified index in the OHLC series
+            DataPoint dataPoint = chart_stockData.Series["Series_OHLC"].Points[i];
+            // Create a new ArrowAnnotation instance
+            ArrowAnnotation arrow = new ArrowAnnotation();
+            // Set the annotation's X axis to the chart's X axis
+            arrow.AxisX = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisX;
+            // Set the annotation's Y axis to the chart's Y axis
+            arrow.AxisY = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY;
+            // Set the annotation's arrow color to red for peak and green for valley
+            arrow.BackColor = isPeak ? Color.Red : Color.Green;
+            // Set the annotation's arrow width to 0 (vertical)
+            arrow.Width = 0;
+            // Set the annotation's arrow height to -10 (down) for peak and 10 (up) for valley
+            arrow.Height = isPeak ? -10 : 10;
+            // Anchor the arrow to the specified DataPoint
+            arrow.SetAnchor(dataPoint);
+
+            // If the candlestick is a valley
+            if (!isPeak)
+            {
+                // Adjust the arrow Y position to the low price of the candlestick
+                arrow.Y = (double)filteredCandlesticks[i].low;
+            }
+            // Add the arrow annotation to the chart
+            chart_stockData.Annotations.Add(arrow);
+        }
+
+        private void detectPeakAndValley()
+        {
+            // Get the peak/valley margin value set by the user
+            int margin = trackBar_peakValleyMargin.Value;
+            // Clear existing annotations in the chart
+            chart_stockData.Annotations.Clear();
+
+            // Loop through the filtered candlesticks list with a margin
+            for (int i = margin; i < filteredCandlesticks.Count - margin; i++)
+            {
+                // Declare a variable to store the current candlestick
+                Candlestick currentCandlestick = filteredCandlesticks[i];
+                // Declare a variable to check if the current candlestick is a peak
+                bool isPeak = true;
+                // Declare a variable to check if the current candlestick is a valley
+                bool isValley = true;
+
+                // Check the previous and next candlesticks within the margin
+                for (int j = 1; j <= margin; j++)
+                {
+                    // Declare a variable to store the previous candlestick
+                    Candlestick prevCandlestick = filteredCandlesticks[i - j];
+                    // Declare a variable to store the next candlestick
+                    Candlestick nextCandlestick = filteredCandlesticks[i + j];
+
+                    // If the current candlestick high is less than or equal to the previous or next candlestick high
+                    if (currentCandlestick.high <= prevCandlestick.high || currentCandlestick.high <= nextCandlestick.high)
+                    {
+                        // The current candlestick is not a peak
+                        isPeak = false;
+                    }
+
+                    // If the current candlestick low is greater than or equal to the previous or next candlestick low
+                    if (currentCandlestick.low >= prevCandlestick.low || currentCandlestick.low >= nextCandlestick.low)
+                    {
+                        // The current candlestick is not a valley
+                        isValley = false;
+                    }
+                }
+
+                // If the current candlestick is a peak
+                if (isPeak)
+                {
+                    // Add an arrow annotation to the chart indicating a peak
+                    addPeakValleyAnnotation(i, true);
+                }
+                // If the current candlestick is a valley
+                else if (isValley)
+                {
+                    // Add an arrow annotation to the chart indicating a valley
+                    addPeakValleyAnnotation(i, false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Function to handle the event when the user changes the value of trackBar_peakValleyMargin
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void trackBar_peakValleyMargin_ValueChanged(object sender, EventArgs e)
+        {
+            // Set the label_peakValleyMargin text to display the current value of the margin
+            // set by the user in the trackBar_peakValleyMargin
+            label_peakValleyMargin.Text = "Peak/Valley Margin: " + trackBar_peakValleyMargin.Value;
+        }
+
+        /// <summary>
+        /// Function to handle the click event of the button_refresh
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void button_refresh_Click(object sender, EventArgs e)
+        {
+            // Display stock data based on the user-selected date range
+            displayStockData();
+        }
+
+
     }
 }
