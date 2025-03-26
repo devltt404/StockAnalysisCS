@@ -42,6 +42,10 @@
             this.trackBar_peakValleyMargin = new System.Windows.Forms.TrackBar();
             this.label_peakValleyMargin = new System.Windows.Forms.Label();
             this.button_refresh = new System.Windows.Forms.Button();
+            this.comboBox_upWave = new System.Windows.Forms.ComboBox();
+            this.label_upWave = new System.Windows.Forms.Label();
+            this.label_downWave = new System.Windows.Forms.Label();
+            this.comboBox_downWave = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart_stockData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_peakValleyMargin)).BeginInit();
             this.SuspendLayout();
@@ -51,10 +55,9 @@
             this.button_loadTicker.BackColor = System.Drawing.Color.MediumBlue;
             this.button_loadTicker.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_loadTicker.ForeColor = System.Drawing.Color.White;
-            this.button_loadTicker.Location = new System.Drawing.Point(34, 14);
-            this.button_loadTicker.Margin = new System.Windows.Forms.Padding(2);
+            this.button_loadTicker.Location = new System.Drawing.Point(51, 22);
             this.button_loadTicker.Name = "button_loadTicker";
-            this.button_loadTicker.Size = new System.Drawing.Size(135, 45);
+            this.button_loadTicker.Size = new System.Drawing.Size(202, 69);
             this.button_loadTicker.TabIndex = 0;
             this.button_loadTicker.Text = "Load Ticker";
             this.button_loadTicker.UseVisualStyleBackColor = false;
@@ -72,32 +75,27 @@
             // 
             // dateTimePicker_startDate
             // 
-            this.dateTimePicker_startDate.Location = new System.Drawing.Point(97, 75);
-            this.dateTimePicker_startDate.Margin = new System.Windows.Forms.Padding(2);
+            this.dateTimePicker_startDate.Location = new System.Drawing.Point(146, 115);
             this.dateTimePicker_startDate.Name = "dateTimePicker_startDate";
-            this.dateTimePicker_startDate.Size = new System.Drawing.Size(183, 20);
+            this.dateTimePicker_startDate.Size = new System.Drawing.Size(272, 26);
             this.dateTimePicker_startDate.TabIndex = 1;
             this.dateTimePicker_startDate.Value = new System.DateTime(2023, 1, 1, 0, 0, 0, 0);
-            this.dateTimePicker_startDate.ValueChanged += new System.EventHandler(this.dateTimePicker_startDate_ValueChanged);
             // 
             // dateTimePicker_endDate
             // 
-            this.dateTimePicker_endDate.Location = new System.Drawing.Point(97, 108);
-            this.dateTimePicker_endDate.Margin = new System.Windows.Forms.Padding(2);
+            this.dateTimePicker_endDate.Location = new System.Drawing.Point(146, 166);
             this.dateTimePicker_endDate.Name = "dateTimePicker_endDate";
-            this.dateTimePicker_endDate.Size = new System.Drawing.Size(183, 20);
+            this.dateTimePicker_endDate.Size = new System.Drawing.Size(272, 26);
             this.dateTimePicker_endDate.TabIndex = 2;
-            this.dateTimePicker_endDate.ValueChanged += new System.EventHandler(this.dateTimePicker_endDate_ValueChanged);
             // 
             // label_startDate
             // 
             this.label_startDate.AutoSize = true;
             this.label_startDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_startDate.ForeColor = System.Drawing.Color.Black;
-            this.label_startDate.Location = new System.Drawing.Point(32, 77);
-            this.label_startDate.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_startDate.Location = new System.Drawing.Point(48, 118);
             this.label_startDate.Name = "label_startDate";
-            this.label_startDate.Size = new System.Drawing.Size(61, 15);
+            this.label_startDate.Size = new System.Drawing.Size(91, 22);
             this.label_startDate.TabIndex = 3;
             this.label_startDate.Text = "Start Date";
             // 
@@ -106,10 +104,9 @@
             this.label_endDate.AutoSize = true;
             this.label_endDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_endDate.ForeColor = System.Drawing.Color.Black;
-            this.label_endDate.Location = new System.Drawing.Point(32, 109);
-            this.label_endDate.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_endDate.Location = new System.Drawing.Point(48, 168);
             this.label_endDate.Name = "label_endDate";
-            this.label_endDate.Size = new System.Drawing.Size(58, 15);
+            this.label_endDate.Size = new System.Drawing.Size(85, 22);
             this.label_endDate.TabIndex = 4;
             this.label_endDate.Text = "End Date";
             // 
@@ -120,8 +117,7 @@
             chartArea4.Name = "ChartArea_Volume";
             this.chart_stockData.ChartAreas.Add(chartArea3);
             this.chart_stockData.ChartAreas.Add(chartArea4);
-            this.chart_stockData.Location = new System.Drawing.Point(35, 196);
-            this.chart_stockData.Margin = new System.Windows.Forms.Padding(2);
+            this.chart_stockData.Location = new System.Drawing.Point(52, 302);
             this.chart_stockData.Name = "chart_stockData";
             series3.ChartArea = "ChartArea_OHLC";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick;
@@ -139,17 +135,18 @@
             series4.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
             this.chart_stockData.Series.Add(series3);
             this.chart_stockData.Series.Add(series4);
-            this.chart_stockData.Size = new System.Drawing.Size(1017, 271);
+            this.chart_stockData.Size = new System.Drawing.Size(1526, 417);
             this.chart_stockData.TabIndex = 5;
             this.chart_stockData.Text = "chart_stockData";
             // 
             // trackBar_peakValleyMargin
             // 
-            this.trackBar_peakValleyMargin.Location = new System.Drawing.Point(405, 90);
+            this.trackBar_peakValleyMargin.Location = new System.Drawing.Point(608, 138);
+            this.trackBar_peakValleyMargin.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.trackBar_peakValleyMargin.Maximum = 4;
             this.trackBar_peakValleyMargin.Minimum = 1;
             this.trackBar_peakValleyMargin.Name = "trackBar_peakValleyMargin";
-            this.trackBar_peakValleyMargin.Size = new System.Drawing.Size(141, 45);
+            this.trackBar_peakValleyMargin.Size = new System.Drawing.Size(212, 69);
             this.trackBar_peakValleyMargin.TabIndex = 6;
             this.trackBar_peakValleyMargin.Value = 1;
             this.trackBar_peakValleyMargin.ValueChanged += new System.EventHandler(this.trackBar_peakValleyMargin_ValueChanged);
@@ -157,9 +154,10 @@
             // label_peakValleyMargin
             // 
             this.label_peakValleyMargin.AutoSize = true;
-            this.label_peakValleyMargin.Location = new System.Drawing.Point(411, 66);
+            this.label_peakValleyMargin.Location = new System.Drawing.Point(616, 102);
+            this.label_peakValleyMargin.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_peakValleyMargin.Name = "label_peakValleyMargin";
-            this.label_peakValleyMargin.Size = new System.Drawing.Size(112, 13);
+            this.label_peakValleyMargin.Size = new System.Drawing.Size(160, 20);
             this.label_peakValleyMargin.TabIndex = 7;
             this.label_peakValleyMargin.Text = "Peak/Valley Margin: 1";
             // 
@@ -168,19 +166,60 @@
             this.button_refresh.BackColor = System.Drawing.SystemColors.Highlight;
             this.button_refresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_refresh.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.button_refresh.Location = new System.Drawing.Point(405, 14);
+            this.button_refresh.Location = new System.Drawing.Point(608, 22);
+            this.button_refresh.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_refresh.Name = "button_refresh";
-            this.button_refresh.Size = new System.Drawing.Size(93, 39);
+            this.button_refresh.Size = new System.Drawing.Size(140, 60);
             this.button_refresh.TabIndex = 8;
             this.button_refresh.Text = "Refresh";
             this.button_refresh.UseVisualStyleBackColor = false;
             this.button_refresh.Click += new System.EventHandler(this.button_refresh_Click);
             // 
+            // comboBox_upWave
+            // 
+            this.comboBox_upWave.FormattingEnabled = true;
+            this.comboBox_upWave.Location = new System.Drawing.Point(874, 54);
+            this.comboBox_upWave.Name = "comboBox_upWave";
+            this.comboBox_upWave.Size = new System.Drawing.Size(239, 28);
+            this.comboBox_upWave.TabIndex = 9;
+            this.comboBox_upWave.SelectedIndexChanged += new System.EventHandler(this.comboBox_upWave_SelectedIndexChanged);
+            // 
+            // label_upWave
+            // 
+            this.label_upWave.AutoSize = true;
+            this.label_upWave.Location = new System.Drawing.Point(870, 22);
+            this.label_upWave.Name = "label_upWave";
+            this.label_upWave.Size = new System.Drawing.Size(75, 20);
+            this.label_upWave.TabIndex = 10;
+            this.label_upWave.Text = "UP Wave";
+            // 
+            // label_downWave
+            // 
+            this.label_downWave.AutoSize = true;
+            this.label_downWave.Location = new System.Drawing.Point(870, 102);
+            this.label_downWave.Name = "label_downWave";
+            this.label_downWave.Size = new System.Drawing.Size(103, 20);
+            this.label_downWave.TabIndex = 11;
+            this.label_downWave.Text = "DOWN Wave";
+            // 
+            // comboBox_downWave
+            // 
+            this.comboBox_downWave.FormattingEnabled = true;
+            this.comboBox_downWave.Location = new System.Drawing.Point(874, 138);
+            this.comboBox_downWave.Name = "comboBox_downWave";
+            this.comboBox_downWave.Size = new System.Drawing.Size(239, 28);
+            this.comboBox_downWave.TabIndex = 12;
+            this.comboBox_downWave.SelectedIndexChanged += new System.EventHandler(this.comboBox_downWave_SelectedIndexChanged);
+            // 
             // Form_AnalyzeStock
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1095, 496);
+            this.ClientSize = new System.Drawing.Size(1642, 763);
+            this.Controls.Add(this.comboBox_downWave);
+            this.Controls.Add(this.label_downWave);
+            this.Controls.Add(this.label_upWave);
+            this.Controls.Add(this.comboBox_upWave);
             this.Controls.Add(this.button_refresh);
             this.Controls.Add(this.label_peakValleyMargin);
             this.Controls.Add(this.trackBar_peakValleyMargin);
@@ -190,6 +229,7 @@
             this.Controls.Add(this.dateTimePicker_endDate);
             this.Controls.Add(this.dateTimePicker_startDate);
             this.Controls.Add(this.button_loadTicker);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form_AnalyzeStock";
             this.Text = "Analyze Stock";
             ((System.ComponentModel.ISupportInitialize)(this.chart_stockData)).EndInit();
@@ -211,6 +251,10 @@
         private System.Windows.Forms.TrackBar trackBar_peakValleyMargin;
         private System.Windows.Forms.Label label_peakValleyMargin;
         private System.Windows.Forms.Button button_refresh;
+        private System.Windows.Forms.ComboBox comboBox_upWave;
+        private System.Windows.Forms.Label label_upWave;
+        private System.Windows.Forms.Label label_downWave;
+        private System.Windows.Forms.ComboBox comboBox_downWave;
     }
 }
 

@@ -20,6 +20,13 @@ namespace StockAnalysisCS
         private List<Candlestick> candlesticks = null;
         // Declare a list to store filtered candlestick objects
         private List<Candlestick> filteredCandlesticks = null;
+        // Declare a list to store the extreme values (peaks and valleys) in the candlestick data.
+        // Extremes are stored as tuples with the date, price, and a boolean value indicating if it is a peak.
+        private List<(DateTime date, decimal price, bool isPeak)> extremes = null;
+        // Declare a list to store the up waves
+        private List<Wave> upWaves = null;
+        // Declare a list to store the down waves
+        private List<Wave> downWaves = null;
 
         public Form_AnalyzeStock()
         {
@@ -29,6 +36,12 @@ namespace StockAnalysisCS
             candlesticks = new List<Candlestick>();
             // Initialize the filtered candlesticks list
             filteredCandlesticks = new List<Candlestick>();
+            // Initialize the extremes list
+            extremes = new List<(DateTime date, decimal price, bool isPeak)>();
+            // Initialize the up waves list
+            upWaves = new List<Wave>();
+            // Initialize the down waves list
+            downWaves = new List<Wave>();
         }
 
         /// <summary>
@@ -46,6 +59,12 @@ namespace StockAnalysisCS
             candlesticks = new List<Candlestick>();
             // Initialize the filtered candlesticks list
             filteredCandlesticks = new List<Candlestick>();
+            // Initialize the extremes list
+            extremes = new List<(DateTime date, decimal price, bool isPeak)>();
+            // Initialize the up waves list
+            upWaves = new List<Wave>();
+            // Initialize the down waves list
+            downWaves = new List<Wave>();
 
             // Set the start date picker value to the specified start date
             dateTimePicker_startDate.Value = start;
@@ -216,28 +235,6 @@ namespace StockAnalysisCS
         }
 
         /// <summary>
-        /// Function to handle the event when the user selects a date in the start date picker
-        /// </summary>
-        /// <param name="sender">The control that triggered the event</param>
-        /// <param name="e">Event data</param>
-        private void dateTimePicker_startDate_ValueChanged(object sender, EventArgs e)
-        {
-            // Display stock data based on the user-selected date range
-            displayStockData();
-        }
-
-        /// <summary>
-        /// Function to handle the event when the user selects a date in the end date picker
-        /// </summary>
-        /// <param name="sender">The control that triggered the event</param>
-        /// <param name="e">Event data</param>
-        private void dateTimePicker_endDate_ValueChanged(object sender, EventArgs e)
-        {
-            // Display stock data based on the user-selected date range
-            displayStockData();
-        }
-
-        /// <summary>
         /// Calls functions to filter candlesticks, reset, and update the chart.
         /// </summary>
         private void displayStockData()
@@ -259,6 +256,8 @@ namespace StockAnalysisCS
                 displayChart();
                 // Detect peaks and valleys in the candlestick data
                 detectPeakAndValley();
+                // Detect waves in the candlestick data
+                detectWaves();
             }
         }
 
@@ -302,6 +301,8 @@ namespace StockAnalysisCS
             int margin = trackBar_peakValleyMargin.Value;
             // Clear existing annotations in the chart
             chart_stockData.Annotations.Clear();
+            // Clear existing extremes list
+            extremes.Clear();
 
             // Loop through the filtered candlesticks list with a margin
             for (int i = margin; i < filteredCandlesticks.Count - margin; i++)
@@ -339,12 +340,16 @@ namespace StockAnalysisCS
                 // If the current candlestick is a peak
                 if (isPeak)
                 {
+                    // Add the peak to the extremes list
+                    extremes.Add((currentCandlestick.date, currentCandlestick.high, true));
                     // Add an arrow annotation to the chart indicating a peak
                     addPeakValleyAnnotation(i, true);
                 }
                 // If the current candlestick is a valley
                 else if (isValley)
                 {
+                    // Add the valley to the extremes list
+                    extremes.Add((currentCandlestick.date, currentCandlestick.low, false));
                     // Add an arrow annotation to the chart indicating a valley
                     addPeakValleyAnnotation(i, false);
                 }
@@ -372,8 +377,183 @@ namespace StockAnalysisCS
         {
             // Display stock data based on the user-selected date range
             displayStockData();
+            // Clear the selected wave in the comboBox_downWave
+            comboBox_downWave.Text = "";
+            // Clear the selected wave in the comboBox_upWave
+            comboBox_upWave.Text = "";
         }
 
 
+        /// <summary>
+        /// Function to detect waves in the candlestick data
+        /// </summary>
+        private void detectWaves()
+        {
+            // Clear existing waves in the upWaves list
+            upWaves.Clear();
+            // Clear existing waves in the downWaves list
+            downWaves.Clear();
+            // Clear existing items in the comboBox_downWave
+            comboBox_downWave.Items.Clear();
+            // Clear existing items in the comboBox_upWave
+            comboBox_upWave.Items.Clear();
+            // Loop through the extremes list to find waves
+            for (int i = 0; i < extremes.Count - 1; i++)
+            {
+                // Loop through the extremes list starting from the next index
+                for (int j = i + 1; j < extremes.Count; j++)
+                {
+                    // Get the previous extreme value
+                    var prevExtreme = extremes[i];
+                    // Get the next extreme value
+                    var nextExtreme = extremes[j];
+                    // Create a new Wave object with the start and end dates and prices
+                    Wave tempWave = new Wave { startDate = prevExtreme.date, startPrice = prevExtreme.price, endDate = nextExtreme.date, endPrice = nextExtreme.price };
+                    // Create a label for the wave
+                    var waveLabel = tempWave.startDate.ToString("MM/dd/yyyy") + " - " + tempWave.endDate.ToString("MM/dd/yyyy");
+                    // Check if the wave is a down wave
+                    if (prevExtreme.isPeak && !nextExtreme.isPeak && prevExtreme.price > nextExtreme.price)
+                    {
+                        // Add the wave to the downWaves list
+                        downWaves.Add(tempWave);
+                        // Add the wave label to the comboBox_downWave
+                        comboBox_downWave.Items.Add(waveLabel);
+                    }
+                    // Check if the wave is an up wave
+                    else if (!prevExtreme.isPeak && nextExtreme.isPeak && prevExtreme.price < nextExtreme.price)
+                    {
+                        // Add the wave to the upWaves list
+                        upWaves.Add(tempWave);
+                        // Add the wave label to the comboBox_upWave
+                        comboBox_upWave.Items.Add(waveLabel);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Function to handle the event when the user selects an up wave from the comboBox_upWave
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void comboBox_upWave_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox_upWave.SelectedIndex >= 0 && comboBox_upWave.SelectedIndex < upWaves.Count)
+            {
+                // Get the selected up wave
+                Wave selectedWave = upWaves[comboBox_upWave.SelectedIndex];
+
+                // Draw the up wave
+                addWaveAnnotation(selectedWave, true);
+            }
+        }
+
+        /// <summary>
+        /// Function to handle the event when the user selects an down wave from the comboBox_downWave
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void comboBox_downWave_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox_downWave.SelectedIndex >= 0 && comboBox_downWave.SelectedIndex < downWaves.Count)
+            {
+                // Get the selected down wave
+                Wave selectedWave = downWaves[comboBox_downWave.SelectedIndex];
+
+                // Draw the down wave
+                addWaveAnnotation(selectedWave, false);
+            }
+        }
+
+        /// <summary>
+        /// Function to add wave annotation to the chart
+        /// </summary>
+        /// <param name="wave">The selected wave object</param>
+        /// <param name="isUp">Boolean value indicating if the wave is an up wave</param>
+        private void addWaveAnnotation(Wave wave, bool isUp)
+        {
+            // Clear existing wave annotations in the chart
+            foreach (var annotation in chart_stockData.Annotations.ToList())
+            {
+                // Check if wave is up
+                if (isUp)
+                {
+                    /// Check if the annotation is an up wave rectangle or line
+                    if (annotation.Name == "Up_Wave_Rectangle" || annotation.Name == "Up_Wave_Line")
+                    {
+                        // Remove the annotation from the chart
+                        chart_stockData.Annotations.Remove(annotation);
+                    }
+                }
+                // Check if wave is down
+                else
+                {
+                    /// Check if the annotation is a down wave rectangle or line
+                    if (annotation.Name == "Down_Wave_Rectangle" || annotation.Name == "Down_Wave_Line")
+                    {
+                        // Remove the annotation from the chart
+                        chart_stockData.Annotations.Remove(annotation);
+                    }
+                }
+            }
+            
+            // Find the start point of the wave
+            DataPoint startPoint = chart_stockData.Series["Series_OHLC"].Points
+                .FirstOrDefault(p => p.XValue == wave.startDate.ToOADate());
+            // Find the end point of the wave
+            DataPoint endPoint = chart_stockData.Series["Series_OHLC"].Points
+                .FirstOrDefault(p => p.XValue == wave.endDate.ToOADate());
+
+            // If the start or end point is not found, exit the function
+            if (startPoint == null || endPoint == null) return;
+
+            // Set the color of up wave to green and down wave to red
+            var color = isUp ? Color.Green : Color.Red;
+
+            // Create rectangle annotation for the wave
+            RectangleAnnotation rect = new RectangleAnnotation();
+            // Set the name of the rectangle annotation
+            rect.Name = isUp ? "Up_Wave_Rectangle" : "Down_Wave_Rectangle";
+            // Set the X axis of the rectangle annotation to the chart's X axis
+            rect.AxisX = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisX;
+            // Set the Y axis of the rectangle annotation to the chart's Y axis
+            rect.AxisY = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY;
+            // Set the color of the rectangle annotation
+            rect.LineColor = color;
+            // Set the width of the rectangle annotation
+            rect.LineWidth = 2;
+            // Set the background color of the rectangle annotation
+            rect.BackColor = Color.FromArgb(35, color);
+            // Set the anchor of the rectangle annotation to the start and end points
+            rect.SetAnchor(startPoint, endPoint);
+            // Set the anchor alignment of the rectangle annotation to top left
+            rect.AnchorAlignment = ContentAlignment.TopLeft;
+            rect.SmartLabelStyle.Enabled = false;
+
+            // Create diagonal line annotation
+            LineAnnotation line = new LineAnnotation();
+            // Set line name
+            line.Name = isUp ? "Up_Wave_Line" : "Down_Wave_Line";
+            // Set line X axis to chart X axis
+            line.AxisX = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisX;
+            // Set line Y axis to chart Y axis
+            line.AxisY = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY;
+            // Set line color
+            line.LineColor = color;
+            // Set line width
+            line.LineWidth = 2;
+            line.SmartLabelStyle.Enabled = false;
+
+            // Set the anchor of the line annotation to the start and end points
+            line.SetAnchor(startPoint, endPoint);
+
+            // Add rectangle annotation to the chart
+            chart_stockData.Annotations.Add(rect);
+            // Add line annotation to the chart
+            chart_stockData.Annotations.Add(line);
+
+            // Refresh the chart
+            chart_stockData.Invalidate();
+        }
     }
 }
