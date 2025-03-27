@@ -528,6 +528,7 @@ namespace StockAnalysisCS
             rect.SetAnchor(startPoint, endPoint);
             // Set the anchor alignment of the rectangle annotation to top left
             rect.AnchorAlignment = ContentAlignment.TopLeft;
+            // Enable annotation to overlap with other annotations
             rect.SmartLabelStyle.Enabled = false;
 
             // Create diagonal line annotation
@@ -542,6 +543,7 @@ namespace StockAnalysisCS
             line.LineColor = color;
             // Set line width
             line.LineWidth = 2;
+            // Enable annotation to overlap with other annotations
             line.SmartLabelStyle.Enabled = false;
 
             // Set the anchor of the line annotation to the start and end points
