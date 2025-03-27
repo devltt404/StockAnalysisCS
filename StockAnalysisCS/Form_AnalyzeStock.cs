@@ -246,6 +246,8 @@ namespace StockAnalysisCS
             chart_stockData.Series["Series_OHLC"].Points.Clear();
             // Clear existing Volume data in the chart 
             chart_stockData.Series["Series_Volume"].Points.Clear();
+            // Clear existing annotations
+            chart_stockData.Annotations.Clear();
 
             // Check if there are candlesticks within the date range to display
             if (filteredCandlesticks.Count > 0)
