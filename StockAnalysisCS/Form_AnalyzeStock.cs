@@ -28,7 +28,10 @@ namespace StockAnalysisCS
         // Declare a list to store the down waves
         private List<Wave> downWaves = null;
 
-        public Form_AnalyzeStock()
+        /// <summary>
+        /// Function to initialize the form components and data members
+        /// </summary>
+        private void intializeForm()
         {
             // Initialize the form components
             InitializeComponent();
@@ -44,6 +47,12 @@ namespace StockAnalysisCS
             downWaves = new List<Wave>();
         }
 
+        public Form_AnalyzeStock()
+        {
+            // Initialize the form components and data members
+            intializeForm();
+        }
+
         /// <summary>
         /// Constructor to create a new instance of the Form_AnalyzeStock class
         /// with specified ticker file name, start date, and end date
@@ -53,18 +62,8 @@ namespace StockAnalysisCS
         /// <param name="end">The end date for candlesticks filtering</param>
         public Form_AnalyzeStock(string tickerFileName, DateTime start, DateTime end)
         {
-            // Initialize the form components
-            InitializeComponent();
-            // Initialize the candlesticks list
-            candlesticks = new List<Candlestick>();
-            // Initialize the filtered candlesticks list
-            filteredCandlesticks = new List<Candlestick>();
-            // Initialize the extremes list
-            extremes = new List<(DateTime date, decimal price, bool isPeak)>();
-            // Initialize the up waves list
-            upWaves = new List<Wave>();
-            // Initialize the down waves list
-            downWaves = new List<Wave>();
+            // Initialize the form components and data members
+            intializeForm();
 
             // Set the start date picker value to the specified start date
             dateTimePicker_startDate.Value = start;
