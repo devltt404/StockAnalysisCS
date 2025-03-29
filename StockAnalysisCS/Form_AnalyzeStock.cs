@@ -122,6 +122,7 @@ namespace StockAnalysisCS
                     displayStockData();
                 } else
                 {
+                    // Create a new form to display and analyze stock data of the subsequent files
                     analyzeStockForm = new Form_AnalyzeStock(fileName, startDate, endDate);
                 }
 
@@ -296,6 +297,9 @@ namespace StockAnalysisCS
             chart_stockData.Annotations.Add(arrow);
         }
 
+        /// <summary>
+        /// Function to detect peaks and valleys in the candlestick data
+        /// </summary>
         private void detectPeakAndValley()
         {
             // Get the peak/valley margin value set by the user
@@ -439,6 +443,7 @@ namespace StockAnalysisCS
         /// <param name="e">Event data</param>
         private void comboBox_upWave_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Check if the selected index is valid
             if (comboBox_upWave.SelectedIndex >= 0 && comboBox_upWave.SelectedIndex < upWaves.Count)
             {
                 // Get the selected up wave
@@ -456,6 +461,7 @@ namespace StockAnalysisCS
         /// <param name="e">Event data</param>
         private void comboBox_downWave_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // Check if the selected index is valid
             if (comboBox_downWave.SelectedIndex >= 0 && comboBox_downWave.SelectedIndex < downWaves.Count)
             {
                 // Get the selected down wave
