@@ -119,6 +119,10 @@ namespace StockAnalysisCS
                 {
                     // Use the current form to display and analyze stock data of the first file
                     analyzeStockForm = this;
+                    // Set the selected downwave to empty
+                    comboBox_downWave.Text = "";
+                    // Set the selected upwave to empty
+                    comboBox_upWave.Text = "";
                     // Read the candlestick data from the selected file
                     readCandlesticksFromFile(fileName);
                     // Display the stock data based on the user-selected date range
@@ -174,13 +178,8 @@ namespace StockAnalysisCS
                     candlesticks.Add(candlestick);
                 }
             }
-            // Check if there are at least two candlesticks in the list 
-            // and the first candlestick date is greater than the second candlestick date
-            if (candlesticks.Count >=2 && candlesticks[0].date > candlesticks[1].date)
-            {
-                // Reverse the order of the candlesticks
-                candlesticks.Reverse();
-            }
+            // Sort the candlesticks list by date
+            candlesticks.Sort((a, b) => a.date.CompareTo(b.date));
         }
 
         /// <summary>
