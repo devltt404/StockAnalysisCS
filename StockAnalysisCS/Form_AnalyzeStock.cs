@@ -351,7 +351,7 @@ namespace StockAnalysisCS
                     addPeakValleyAnnotation(i, true);
                 }
                 // If the current candlestick is a valley
-                else if (isValley)
+                if (isValley)
                 {
                     // Add the valley to the extremes list
                     extremes.Add((currentCandlestick.date, currentCandlestick.low, false));
@@ -416,6 +416,10 @@ namespace StockAnalysisCS
                     Wave tempWave = new Wave { startDate = prevExtreme.date, startPrice = prevExtreme.price, endDate = nextExtreme.date, endPrice = nextExtreme.price };
                     // Create a label for the wave
                     var waveLabel = tempWave.startDate.ToString("MM/dd/yyyy") + " - " + tempWave.endDate.ToString("MM/dd/yyyy");
+
+                    // Check if 2 extremes have same date, then skip to next iteration
+                    if (prevExtreme.date == nextExtreme.date) continue;
+
                     // Check if the wave is a down wave
                     if (prevExtreme.isPeak && !nextExtreme.isPeak && prevExtreme.price > nextExtreme.price)
                     {
