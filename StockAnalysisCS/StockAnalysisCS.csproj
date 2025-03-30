@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Candlestick.cs" />
+    <Compile Include="Extreme.cs" />
     <Compile Include="Form_AnalyzeStock.cs">
       <SubType>Form</SubType>
     </Compile>

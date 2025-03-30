@@ -21,8 +21,7 @@ namespace StockAnalysisCS
         // Declare a list to store filtered candlestick objects
         private List<Candlestick> filteredCandlesticks = null;
         // Declare a list to store the extreme values (peaks and valleys) in the candlestick data.
-        // Extremes are stored as tuples with the date, price, and a boolean value indicating if it is a peak.
-        private List<(DateTime date, decimal price, bool isPeak)> extremes = null;
+        private List<Extreme> extremes = null;
         // Declare a list to store the up waves
         private List<Wave> upWaves = null;
         // Declare a list to store the down waves
@@ -40,7 +39,7 @@ namespace StockAnalysisCS
             // Initialize the filtered candlesticks list
             filteredCandlesticks = new List<Candlestick>();
             // Initialize the extremes list
-            extremes = new List<(DateTime date, decimal price, bool isPeak)>();
+            extremes = new List<Extreme>();
             // Initialize the up waves list
             upWaves = new List<Wave>();
             // Initialize the down waves list
@@ -348,7 +347,7 @@ namespace StockAnalysisCS
                 if (isPeak)
                 {
                     // Add the peak to the extremes list
-                    extremes.Add((currentCandlestick.date, currentCandlestick.high, true));
+                    extremes.Add(new Extreme(currentCandlestick.date, currentCandlestick.high, true, i));
                     // Add an arrow annotation to the chart indicating a peak
                     addPeakValleyAnnotation(i, true);
                 }
@@ -356,7 +355,7 @@ namespace StockAnalysisCS
                 if (isValley)
                 {
                     // Add the valley to the extremes list
-                    extremes.Add((currentCandlestick.date, currentCandlestick.low, false));
+                    extremes.Add(new Extreme(currentCandlestick.date, currentCandlestick.low, false, i));
                     // Add an arrow annotation to the chart indicating a valley
                     addPeakValleyAnnotation(i, false);
                 }
@@ -415,7 +414,7 @@ namespace StockAnalysisCS
                     // Get the next extreme value
                     var nextExtreme = extremes[j];
                     // Create a new Wave object with the start and end dates and prices
-                    Wave tempWave = new Wave { startDate = prevExtreme.date, startPrice = prevExtreme.price, endDate = nextExtreme.date, endPrice = nextExtreme.price };
+                    Wave tempWave = new Wave(prevExtreme.date, nextExtreme.date, prevExtreme.price, nextExtreme.price, prevExtreme.index, nextExtreme.index);
                     // Create a label for the wave
                     var waveLabel = tempWave.startDate.ToString("MM/dd/yyyy") + " - " + tempWave.endDate.ToString("MM/dd/yyyy");
 
@@ -509,19 +508,22 @@ namespace StockAnalysisCS
                     }
                 }
             }
-            
-            // Find the start point of the wave
-            DataPoint startPoint = chart_stockData.Series["Series_OHLC"].Points
-                .FirstOrDefault(p => p.XValue == wave.startDate.ToOADate());
-            // Find the end point of the wave
-            DataPoint endPoint = chart_stockData.Series["Series_OHLC"].Points
-                .FirstOrDefault(p => p.XValue == wave.endDate.ToOADate());
-
-            // If the start or end point is not found, exit the function
-            if (startPoint == null || endPoint == null) return;
 
             // Set the color of up wave to green and down wave to red
             var color = isUp ? Color.Green : Color.Red;
+
+            // Get the x axis of the chart
+            var axisX = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisX;
+            // Get the y axis of the chart
+            var axisY = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY;
+            // Get the x position of the wave annotation
+            var x = wave.startIndex + 1;
+            // Get the width of the wave annotation
+            var width = axisX.ValueToPosition(wave.endIndex) - axisX.ValueToPosition(wave.startIndex);
+            // Get the height of the wave annotation
+            var height = axisY.ValueToPosition((double)wave.endPrice) - axisY.ValueToPosition((double)wave.startPrice);
+            // Get the y position of the wave annotation
+            var y = (double)wave.startPrice;
 
             // Create rectangle annotation for the wave
             RectangleAnnotation rect = new RectangleAnnotation();
@@ -537,12 +539,16 @@ namespace StockAnalysisCS
             rect.LineWidth = 2;
             // Set the background color of the rectangle annotation
             rect.BackColor = Color.FromArgb(35, color);
-            // Set the anchor of the rectangle annotation to the start and end points
-            rect.SetAnchor(startPoint, endPoint);
-            // Set the anchor alignment of the rectangle annotation to top left
-            rect.AnchorAlignment = ContentAlignment.TopLeft;
             // Enable annotation to overlap with other annotations
             rect.SmartLabelStyle.Enabled = false;
+            // Set the X position of the rectangle annotation
+            rect.X = x;
+            // Set the width of the rectangle annotation
+            rect.Width = width;
+            // Set the height of the rectangle annotation
+            rect.Height = height;
+            // Set the Y position of the rectangle annotation
+            rect.Y = y;
 
             // Create diagonal line annotation
             LineAnnotation line = new LineAnnotation();
@@ -558,9 +564,14 @@ namespace StockAnalysisCS
             line.LineWidth = 2;
             // Enable annotation to overlap with other annotations
             line.SmartLabelStyle.Enabled = false;
-
-            // Set the anchor of the line annotation to the start and end points
-            line.SetAnchor(startPoint, endPoint);
+            // Set the line x position
+            line.X = x;
+            // Set the line width
+            line.Width = width;
+            // Set the line height
+            line.Height = height;
+            // Set the line y position
+            line.Y = y;
 
             // Add rectangle annotation to the chart
             chart_stockData.Annotations.Add(rect);
