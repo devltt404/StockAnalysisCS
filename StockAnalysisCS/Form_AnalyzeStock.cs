@@ -55,12 +55,13 @@ namespace StockAnalysisCS
 
         /// <summary>
         /// Constructor to create a new instance of the Form_AnalyzeStock class
-        /// with specified ticker file name, start date, and end date
+        /// with specified ticker file name, start date, end date, and peak/valley margin
         /// </summary>
         /// <param name="tickerFileName">The ticker filename</param>
         /// <param name="start">The start date for candlesticks filtering</param>
         /// <param name="end">The end date for candlesticks filtering</param>
-        public Form_AnalyzeStock(string tickerFileName, DateTime start, DateTime end)
+        /// <param name="margin">The peak/valley margin value</param>
+        public Form_AnalyzeStock(string tickerFileName, DateTime start, DateTime end, int margin)
         {
             // Initialize the form components and data members
             intializeForm();
@@ -69,6 +70,8 @@ namespace StockAnalysisCS
             dateTimePicker_startDate.Value = start;
             // Set the end date picker value to the specified end date
             dateTimePicker_endDate.Value = end;
+            // Set the peak/valley margin trackbar value to the specified margin
+            trackBar_peakValleyMargin.Value = margin;
 
             // Read the candlestick data from the selected file
             readCandlesticksFromFile(tickerFileName);
@@ -123,7 +126,7 @@ namespace StockAnalysisCS
                 } else
                 {
                     // Create a new form to display and analyze stock data of the subsequent files
-                    analyzeStockForm = new Form_AnalyzeStock(fileName, startDate, endDate);
+                    analyzeStockForm = new Form_AnalyzeStock(fileName, startDate, endDate, trackBar_peakValleyMargin.Value);
                 }
 
                 // Set the title of the form to the ticker name
