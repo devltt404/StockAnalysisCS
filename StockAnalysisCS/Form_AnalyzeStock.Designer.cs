@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.button_loadTicker = new System.Windows.Forms.Button();
             this.openFileDialog_loadTicker = new System.Windows.Forms.OpenFileDialog();
             this.dateTimePicker_startDate = new System.Windows.Forms.DateTimePicker();
@@ -75,7 +75,7 @@
             // 
             // dateTimePicker_startDate
             // 
-            this.dateTimePicker_startDate.Location = new System.Drawing.Point(146, 115);
+            this.dateTimePicker_startDate.Location = new System.Drawing.Point(146, 106);
             this.dateTimePicker_startDate.Name = "dateTimePicker_startDate";
             this.dateTimePicker_startDate.Size = new System.Drawing.Size(272, 26);
             this.dateTimePicker_startDate.TabIndex = 1;
@@ -83,7 +83,7 @@
             // 
             // dateTimePicker_endDate
             // 
-            this.dateTimePicker_endDate.Location = new System.Drawing.Point(146, 166);
+            this.dateTimePicker_endDate.Location = new System.Drawing.Point(146, 157);
             this.dateTimePicker_endDate.Name = "dateTimePicker_endDate";
             this.dateTimePicker_endDate.Size = new System.Drawing.Size(272, 26);
             this.dateTimePicker_endDate.TabIndex = 2;
@@ -93,7 +93,7 @@
             this.label_startDate.AutoSize = true;
             this.label_startDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_startDate.ForeColor = System.Drawing.Color.Black;
-            this.label_startDate.Location = new System.Drawing.Point(48, 118);
+            this.label_startDate.Location = new System.Drawing.Point(48, 109);
             this.label_startDate.Name = "label_startDate";
             this.label_startDate.Size = new System.Drawing.Size(91, 22);
             this.label_startDate.TabIndex = 3;
@@ -104,7 +104,7 @@
             this.label_endDate.AutoSize = true;
             this.label_endDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_endDate.ForeColor = System.Drawing.Color.Black;
-            this.label_endDate.Location = new System.Drawing.Point(48, 168);
+            this.label_endDate.Location = new System.Drawing.Point(48, 159);
             this.label_endDate.Name = "label_endDate";
             this.label_endDate.Size = new System.Drawing.Size(85, 22);
             this.label_endDate.TabIndex = 4;
@@ -112,34 +112,38 @@
             // 
             // chart_stockData
             // 
-            chartArea3.Name = "ChartArea_OHLC";
-            chartArea4.AlignWithChartArea = "ChartArea_OHLC";
-            chartArea4.Name = "ChartArea_Volume";
-            this.chart_stockData.ChartAreas.Add(chartArea3);
-            this.chart_stockData.ChartAreas.Add(chartArea4);
-            this.chart_stockData.Location = new System.Drawing.Point(52, 302);
+            chartArea1.Name = "ChartArea_OHLC";
+            chartArea2.AlignWithChartArea = "ChartArea_OHLC";
+            chartArea2.Name = "ChartArea_Volume";
+            this.chart_stockData.ChartAreas.Add(chartArea1);
+            this.chart_stockData.ChartAreas.Add(chartArea2);
+            this.chart_stockData.Location = new System.Drawing.Point(51, 210);
             this.chart_stockData.Name = "chart_stockData";
-            series3.ChartArea = "ChartArea_OHLC";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick;
-            series3.CustomProperties = "PriceDownColor=Red, PriceUpColor=Green";
-            series3.IsXValueIndexed = true;
-            series3.Name = "Series_OHLC";
-            series3.XValueMember = "Date";
-            series3.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
-            series3.YValueMembers = "High,Low,Open,Close";
-            series3.YValuesPerPoint = 4;
-            series4.ChartArea = "ChartArea_Volume";
-            series4.IsXValueIndexed = true;
-            series4.Name = "Series_Volume";
-            series4.XValueMember = "Date";
-            series4.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
-            series4.YValueMembers = "Volume";
-            series4.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
-            this.chart_stockData.Series.Add(series3);
-            this.chart_stockData.Series.Add(series4);
-            this.chart_stockData.Size = new System.Drawing.Size(1526, 417);
+            series1.ChartArea = "ChartArea_OHLC";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick;
+            series1.CustomProperties = "PriceDownColor=Red, PriceUpColor=Green";
+            series1.IsXValueIndexed = true;
+            series1.Name = "Series_OHLC";
+            series1.XValueMember = "Date";
+            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
+            series1.YValueMembers = "High,Low,Open,Close";
+            series1.YValuesPerPoint = 4;
+            series2.ChartArea = "ChartArea_Volume";
+            series2.IsXValueIndexed = true;
+            series2.Name = "Series_Volume";
+            series2.XValueMember = "Date";
+            series2.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
+            series2.YValueMembers = "Volume";
+            series2.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
+            this.chart_stockData.Series.Add(series1);
+            this.chart_stockData.Series.Add(series2);
+            this.chart_stockData.Size = new System.Drawing.Size(1526, 748);
             this.chart_stockData.TabIndex = 5;
             this.chart_stockData.Text = "chart_stockData";
+            this.chart_stockData.Paint += new System.Windows.Forms.PaintEventHandler(this.chart_stockData_Paint);
+            this.chart_stockData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chart_stockData_MouseDown);
+            this.chart_stockData.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart_stockData_MouseMove);
+            this.chart_stockData.MouseUp += new System.Windows.Forms.MouseEventHandler(this.chart_stockData_MouseUp);
             // 
             // trackBar_peakValleyMargin
             // 
@@ -217,7 +221,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1642, 763);
+            this.ClientSize = new System.Drawing.Size(1642, 990);
             this.Controls.Add(this.comboBox_downWave);
             this.Controls.Add(this.label_downWave);
             this.Controls.Add(this.label_upWave);
@@ -233,6 +237,7 @@
             this.Controls.Add(this.button_loadTicker);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form_AnalyzeStock";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
             this.Text = "Analyze Stock";
             ((System.ComponentModel.ISupportInitialize)(this.chart_stockData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_peakValleyMargin)).EndInit();

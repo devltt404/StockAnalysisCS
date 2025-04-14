@@ -27,6 +27,19 @@ namespace StockAnalysisCS
         // Declare a list to store the down waves
         private List<Wave> downWaves = null;
 
+        // Declare a variable to store the index of the starting point of the rubber banding operation
+        private int startPointIdx;
+        // Declare a variable to store the index of the ending point of the rubber banding operation
+        private int endPointIdx;
+        // Declare a variable to store the starting point of the rubber banding operation
+        private Point startPoint;
+        // Declare a variable to store the current point of the mouse in the chart area
+        private Point currentPoint;
+        // Declare a variable to indicate if the user is currently dragging the mouse in the chart area
+        private bool isDragging = false;
+        // Declare a variable to indicate if the user has selected a valid wave
+        private bool isValidWaveSelected = false;
+
         /// <summary>
         /// Function to initialize the form components and data members
         /// </summary>
@@ -126,7 +139,8 @@ namespace StockAnalysisCS
                     readCandlesticksFromFile(fileName);
                     // Display the stock data based on the user-selected date range
                     displayStockData();
-                } else
+                }
+                else
                 {
                     // Create a new form to display and analyze stock data of the subsequent files
                     analyzeStockForm = new Form_AnalyzeStock(fileName, startDate, endDate, trackBar_peakValleyMargin.Value);
@@ -381,12 +395,14 @@ namespace StockAnalysisCS
         /// <param name="e">Event data</param>
         private void button_refresh_Click(object sender, EventArgs e)
         {
+            // Reset the isValidWaveSelected flag to false
+            isValidWaveSelected = false;
             // Display stock data based on the user-selected date range
             displayStockData();
             // Clear the selected wave in the comboBox_downWave
             comboBox_downWave.Text = "";
             // Clear the selected wave in the comboBox_upWave
-            comboBox_upWave.Text = "";
+            comboBox_upWave.Text = "";   
         }
 
 
@@ -580,6 +596,195 @@ namespace StockAnalysisCS
 
             // Refresh the chart
             chart_stockData.Invalidate();
+        }
+
+        /// <summary>
+        /// Function to check if the selected wave of the rubber banding operation is valid
+        /// </summary>
+        /// <returns>Boolean value indicating if the selected wave is valid</returns>
+        private bool isValidWave()
+        {
+            // Get the start candlestick index of the wave
+            int startCandlestickIdx = Math.Min(startPointIdx, endPointIdx);
+            // Get the end candlestick index of the wave
+            int endCandlestickIdx = Math.Max(startPointIdx, endPointIdx);
+
+            // Check if the start and end index of the candlesticks are invalid
+            if (startCandlestickIdx < 0 || endCandlestickIdx< 0 || startCandlestickIdx >= filteredCandlesticks.Count 
+                || endCandlestickIdx >= filteredCandlesticks.Count
+                )
+            {
+                // Return false if the indices are invalid
+                return false;
+            }
+            else
+            {
+                // Check if the selected wave is valid
+                bool isWaveExist = upWaves.Any(wave => wave.startIndex == startCandlestickIdx && wave.endIndex == endCandlestickIdx) ||
+                                   downWaves.Any(wave => wave.startIndex == startCandlestickIdx && wave.endIndex == endCandlestickIdx);
+                // Return the result
+                return isWaveExist;
+            }
+        }
+
+
+
+        /// <summary>
+        /// Function to handle the mouse down event on the chart
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void chart_stockData_MouseDown(object sender, MouseEventArgs e)
+        {
+            // Declare a variable to store the hit test result of the mouse event
+            HitTestResult hit = chart_stockData.HitTest(e.X, e.Y);
+
+            // Declare a variable to indicate if the mouse is clicked on an extreme candlestick
+            bool isHitAnExtreme = extremes.Any(extreme => extreme.index == hit.PointIndex);
+
+            // Check if the clicked candlestick is a peak or valley
+            if (isHitAnExtreme)
+            {
+                // Set the index of the start point of the rubber banding operation
+                startPointIdx = hit.PointIndex;
+                // Set the start point of the rubber banding operation
+                startPoint = e.Location;
+                // Set the isDragging to true
+                isDragging = true;
+                // Reset the boolean value to indicate if a valid wave is selected
+                isValidWaveSelected = false;
+            }
+            else
+            {
+                // Set the isDragging to false
+                isDragging = false;
+                // Display an error message if the clicked candlestick is not a peak or valley
+                MessageBox.Show("You must select a peak or valley candlestick for the rubber-banding operation.");
+            }
+        }
+
+        /// <summary>
+        /// Function to handle the mouse up event on the chart
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void chart_stockData_MouseUp(object sender, MouseEventArgs e)
+        {
+            // Set the isDragging to false
+            isDragging = false;
+
+            // Check if the selected wave is valid
+            isValidWaveSelected = isValidWave();
+        }
+
+        /// <summary>
+        /// Function to handle the mouse move event on the chart
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void chart_stockData_MouseMove(object sender, MouseEventArgs e)
+        {
+            // Declare a variable to store the hit test result of the mouse event
+            HitTestResult hit = chart_stockData.HitTest(e.X, e.Y);
+
+            // Check if the mouse is being dragged and mouse is moved in the ohlc chart area
+            if (isDragging && hit.ChartArea != null && hit.ChartArea.Name == "ChartArea_OHLC")
+            {
+                // Set the current point of the mouse in the chart area
+                currentPoint = e.Location;
+                // Set the end point index of the rubber banding operation
+                endPointIdx = hit.PointIndex;
+                // Invalidate the chart to refresh the display
+                chart_stockData.Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Function to handle the paint event of the chart
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void chart_stockData_Paint(object sender, PaintEventArgs e)
+        {
+            // Check if the user is dragging the mouse or a valid wave is selected
+            if (isDragging || isValidWaveSelected)
+            {
+                // Get the graphics object from the event
+                Graphics g = e.Graphics;
+
+                // Get the x of the rectangle
+                int x = startPoint.X;
+                // Get the y of the rectangle
+                int y = Math.Min(startPoint.Y, currentPoint.Y);
+                // Get the width of the rectangle
+                int width = Math.Abs(currentPoint.X - startPoint.X);
+                // Get the height of the rectangle
+                int height = Math.Abs(currentPoint.Y - startPoint.Y);
+
+                // Check if the enclosing rectangle is valid wave
+                bool isRectangleValidWave = isValidWave();
+
+                // Declare pen to draw the rectangle
+                using (var pen = new Pen(Color.Red, 2))
+                {
+                    // Draw the enclosing rectangle
+                    g.DrawRectangle(pen, x, y, width, height);
+                }
+                // Declare pen to draw the diagonal line
+                using (var pen = new Pen(Color.Red, 2))
+                {
+                    // Check if mouse is moving up
+                    if(currentPoint.Y < startPoint.Y)
+                    {
+                        // Draw the diagonal line
+                        g.DrawLine(pen, x, startPoint.Y, x + width, startPoint.Y - height);
+                    }
+                    // Check if mouse is moving down
+                    else
+                    {
+                        // Draw the diagonal line
+                        g.DrawLine(pen, x, y, x + width, y + height);
+                    }
+                }
+                // Declare brush to fill the rectangle
+                using (var fillBrush = new SolidBrush(Color.FromArgb(35, (isRectangleValidWave) ? (Color.Green) : (Color.Red))))
+                {
+                    // Fill the rectangle on the chart
+                    g.FillRectangle(fillBrush, x, y, width, height);
+                }
+
+                // Check if the selected rectangle is a valid wave
+                if (isRectangleValidWave)
+                {
+                    // Check if the selected wave is a down wave
+                    bool isDownWave = filteredCandlesticks[startPointIdx].high > filteredCandlesticks[endPointIdx].high;
+                    // Declare an array of Fibonacci levels
+                    decimal[] fibonnaciLevels = { 0.0M, 0.236M, 0.382M, 0.5M, 0.618M, 0.764M, 1.0M };
+
+                    // Loop through the Fibonacci levels
+                    foreach (var level in fibonnaciLevels)
+                    {
+                        // Calculate the y position of the Fibonacci level
+                        int levelY = y + (int)(level * height);
+
+                        // Declare a pen to draw the Fibonacci level line
+                        using (var levelPen = new Pen(Color.Blue, 2))
+                        {
+                            // Draw the Fibonacci level line
+                            g.DrawLine(levelPen, x, levelY, x + width, levelY);
+                        }
+
+                        // Declare a font to draw the Fibonacci level text
+                        using (var levelFont = new Font("Arial", 10, FontStyle.Bold))
+                        {
+                            // Format the Fibonacci level label
+                            string label = $"{((isDownWave ? (1 - level) : level) * 100):0.0}%";
+                            // Draw the Fibonacci level text
+                            g.DrawString(label, levelFont, Brushes.Black, x + width + 5, levelY - 10);
+                        }
+                    }
+                }
+             }
         }
     }
 }
