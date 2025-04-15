@@ -802,7 +802,7 @@ namespace StockAnalysisCS
                     }
 
                     // Calculate the margin for the confirmations
-                    var margin = Math.Abs(chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY.PixelPositionToValue(currentPoint.Y) - chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY.PixelPositionToValue(startPoint.Y)) * 0.01;
+                    var margin = Math.Abs(chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY.PixelPositionToValue(currentPoint.Y) - chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY.PixelPositionToValue(startPoint.Y)) * 0.015;
 
                     // Loop through the candlesticks in the selected wave
                     for (int i = startPointIdx; i <= endPointIdx; i++)
@@ -850,9 +850,9 @@ namespace StockAnalysisCS
                         }
                     }
                 }
+            }
                 // Set the label_confirmationsCount text to display the number of confirmations
                 label_confirmationsCount.Text = $"Number of confirmations: {confirmationAnnotations.Count}";
-            }
         }
     }
 }
