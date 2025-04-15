@@ -643,9 +643,6 @@ namespace StockAnalysisCS
             // Declare a variable to store the hit test result of the mouse event
             HitTestResult hit = chart_stockData.HitTest(e.X, e.Y);
 
-            // Declare a variable to indicate if the mouse is clicked on an extreme candlestick
-            bool isHitAnExtreme = extremes.Any(extreme => extreme.index == hit.PointIndex);
-
             // Set the index of the start point of the rubber banding operation
             startPointIdx = hit.PointIndex;
             // Set the start point of the rubber banding operation
@@ -654,7 +651,6 @@ namespace StockAnalysisCS
             isDragging = true;
             // Reset the boolean value to indicate if a valid wave is selected
             isValidWaveSelected = false;
-
         }
 
         /// <summary>
