@@ -39,6 +39,8 @@ namespace StockAnalysisCS
         private bool isDragging = false;
         // Declare a variable to indicate if the user has selected a valid wave
         private bool isValidWaveSelected = false;
+        // Declare a variable to store the confirmation annotations
+        private List<EllipseAnnotation> confirmationAnnotations = null;
 
         /// <summary>
         /// Function to initialize the form components and data members
@@ -57,6 +59,8 @@ namespace StockAnalysisCS
             upWaves = new List<Wave>();
             // Initialize the down waves list
             downWaves = new List<Wave>();
+            // Initialize the confirmation annotations list
+            confirmationAnnotations = new List<EllipseAnnotation>();
         }
 
         public Form_AnalyzeStock()
@@ -709,6 +713,15 @@ namespace StockAnalysisCS
             // Check if the user is dragging the mouse or a valid wave is selected
             if (isDragging || isValidWaveSelected)
             {
+                // Loop through the confirmation annotations list
+                foreach (var annotation in confirmationAnnotations)
+                {
+                    // Remove the existing confirmation annotations from the chart
+                    chart_stockData.Annotations.Remove(annotation);
+                }
+                // Clear the confirmation annotations list
+                confirmationAnnotations.Clear();
+
                 // Get the graphics object from the event
                 Graphics g = e.Graphics;
 
@@ -760,6 +773,8 @@ namespace StockAnalysisCS
                     bool isDownWave = filteredCandlesticks[startPointIdx].high > filteredCandlesticks[endPointIdx].high;
                     // Declare an array of Fibonacci levels
                     decimal[] fibonnaciLevels = { 0.0M, 0.236M, 0.382M, 0.5M, 0.618M, 0.764M, 1.0M };
+                    // Declare a list to store the Fibonacci prices
+                    List<double> fibonnaciPrices = new List<double>();
 
                     // Loop through the Fibonacci levels
                     foreach (var level in fibonnaciLevels)
@@ -777,14 +792,67 @@ namespace StockAnalysisCS
                         // Declare a font to draw the Fibonacci level text
                         using (var levelFont = new Font("Arial", 10, FontStyle.Bold))
                         {
+                            // Add the Fibonacci level price to the list
+                            fibonnaciPrices.Add(chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY.PixelPositionToValue(levelY));
                             // Format the Fibonacci level label
-                            string label = $"{((isDownWave ? (1 - level) : level) * 100):0.0}%";
+                            string label = $"{((isDownWave ? (1 - level) : level) * 100):0.0}% ({fibonnaciPrices.Last():0.000})";
                             // Draw the Fibonacci level text
                             g.DrawString(label, levelFont, Brushes.Black, x + width + 5, levelY - 10);
                         }
                     }
+
+                    // Calculate the margin for the confirmations
+                    var margin = Math.Abs(chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY.PixelPositionToValue(currentPoint.Y) - chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY.PixelPositionToValue(startPoint.Y)) * 0.01;
+
+                    // Loop through the candlesticks in the selected wave
+                    for (int i = startPointIdx; i <= endPointIdx; i++)
+                    {
+                        // Get the candlestick at the current index
+                        var candlestick = filteredCandlesticks[i];
+                        // Declare a list to store the OHLC values
+                        List<decimal> ohlc = new List<decimal> { candlestick.open, candlestick.high, candlestick.low, candlestick.close };
+
+                        // Loop through the OHLC values
+                        foreach (double price in ohlc)
+                        {
+                            // Loop through the Fibonacci prices
+                            foreach (var fibonacciPrice in fibonnaciPrices)
+                            {
+                                // Check if the price is within the margin of the Fibonacci price
+                                if (price >= fibonacciPrice - margin && price <= fibonacciPrice + margin)
+                                {
+                                    // Create a new EllipseAnnotation for the confirmation
+                                    EllipseAnnotation confirmationAnnotation = new EllipseAnnotation
+                                    {
+                                        // Set the axisX
+                                        AxisX = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisX,
+                                        // Set the axisY
+                                        AxisY = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY,
+                                        // Set the anchor data point
+                                        AnchorDataPoint = chart_stockData.Series["Series_OHLC"].Points[i],
+                                        // Set the Y position
+                                        Y = (double)price,
+                                        // Set the width
+                                        Width = 0.6,
+                                        // Set the height
+                                        Height = 1.2,
+                                        // Set the background color
+                                        BackColor = Color.Yellow,
+                                        // Set the anchor alignment
+                                        AnchorAlignment = ContentAlignment.MiddleCenter,
+                                    };
+                                    // Add the confirmation annotation to the list
+                                    confirmationAnnotations.Add(confirmationAnnotation);
+                                    // Add the confirmation annotation to the chart
+                                    chart_stockData.Annotations.Add(confirmationAnnotation);
+                                }
+                            }
+                        }
+                    }
                 }
-             }
+                // Set the label_confirmationsCount text to display the number of confirmations
+                label_confirmationsCount.Text = $"Number of confirmations: {confirmationAnnotations.Count}";
+            }
         }
     }
 }
