@@ -406,7 +406,7 @@ namespace StockAnalysisCS
             // Clear the selected wave in the comboBox_downWave
             comboBox_downWave.Text = "";
             // Clear the selected wave in the comboBox_upWave
-            comboBox_upWave.Text = "";   
+            comboBox_upWave.Text = "";
         }
 
 
@@ -614,7 +614,7 @@ namespace StockAnalysisCS
             int endCandlestickIdx = Math.Max(startPointIdx, endPointIdx);
 
             // Check if the start and end index of the candlesticks are invalid
-            if (startCandlestickIdx < 0 || endCandlestickIdx< 0 || startCandlestickIdx >= filteredCandlesticks.Count 
+            if (startCandlestickIdx < 0 || endCandlestickIdx < 0 || startCandlestickIdx >= filteredCandlesticks.Count
                 || endCandlestickIdx >= filteredCandlesticks.Count
                 )
             {
@@ -646,25 +646,15 @@ namespace StockAnalysisCS
             // Declare a variable to indicate if the mouse is clicked on an extreme candlestick
             bool isHitAnExtreme = extremes.Any(extreme => extreme.index == hit.PointIndex);
 
-            // Check if the clicked candlestick is a peak or valley
-            if (isHitAnExtreme)
-            {
-                // Set the index of the start point of the rubber banding operation
-                startPointIdx = hit.PointIndex;
-                // Set the start point of the rubber banding operation
-                startPoint = e.Location;
-                // Set the isDragging to true
-                isDragging = true;
-                // Reset the boolean value to indicate if a valid wave is selected
-                isValidWaveSelected = false;
-            }
-            else
-            {
-                // Set the isDragging to false
-                isDragging = false;
-                // Display an error message if the clicked candlestick is not a peak or valley
-                MessageBox.Show("You must select a peak or valley candlestick for the rubber-banding operation.");
-            }
+            // Set the index of the start point of the rubber banding operation
+            startPointIdx = hit.PointIndex;
+            // Set the start point of the rubber banding operation
+            startPoint = e.Location;
+            // Set the isDragging to true
+            isDragging = true;
+            // Reset the boolean value to indicate if a valid wave is selected
+            isValidWaveSelected = false;
+
         }
 
         /// <summary>
@@ -747,7 +737,7 @@ namespace StockAnalysisCS
                 using (var pen = new Pen(Color.Red, 2))
                 {
                     // Check if mouse is moving up
-                    if(currentPoint.Y < startPoint.Y)
+                    if (currentPoint.Y < startPoint.Y)
                     {
                         // Draw the diagonal line
                         g.DrawLine(pen, x, startPoint.Y, x + width, startPoint.Y - height);
@@ -851,8 +841,8 @@ namespace StockAnalysisCS
                     }
                 }
             }
-                // Set the label_confirmationsCount text to display the number of confirmations
-                label_confirmationsCount.Text = $"Number of confirmations: {confirmationAnnotations.Count}";
+            // Set the label_confirmationsCount text to display the number of confirmations
+            label_confirmationsCount.Text = $"Number of confirmations: {confirmationAnnotations.Count}";
         }
     }
 }
