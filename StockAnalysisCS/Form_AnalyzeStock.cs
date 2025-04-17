@@ -42,6 +42,11 @@ namespace StockAnalysisCS
         // Declare a variable to store the confirmation annotations
         private List<EllipseAnnotation> confirmationAnnotations = null;
 
+        // Declare a variable to store boolean value indicating if the simulation is running
+        private bool isSimulating = false;
+        // Declare a variable to store the step size for the simulation
+        private double stepSize;
+
         /// <summary>
         /// Function to initialize the form components and data members
         /// </summary>
@@ -665,6 +670,13 @@ namespace StockAnalysisCS
 
             // Check if the selected wave is valid
             isValidWaveSelected = isValidWave();
+
+            // Check if the selected wave is valid
+            if (isValidWaveSelected)
+            {
+                // Set the step size for the simulation
+                stepSize = Math.Abs(currentPoint.X - startPoint.X) / 30;
+            }
         }
 
         /// <summary>
@@ -839,6 +851,49 @@ namespace StockAnalysisCS
             }
             // Set the label_confirmationsCount text to display the number of confirmations
             label_confirmationsCount.Text = $"Number of confirmations: {confirmationAnnotations.Count}";
+        }
+
+        /// <summary>
+        /// Function to handle the click event of the button_simulate
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void button_simulate_Click(object sender, EventArgs e)
+        {
+            // Check if the simulation is not running
+            if (!isSimulating)
+            {
+                // Set the isSimulating to true
+                isSimulating = true;
+                // Set the button_simulate text to "Stop"
+                button_simulate.Text = "Stop";
+            } else
+            {
+                // Set the isSimulating to false
+                isSimulating = false;
+                // Set the button_simulate text to "Start"
+                button_simulate.Text = "Start";
+
+            }
+        }
+
+        /// <summary>
+        /// Function to handle the click event of the button_plus
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void button_plus_Click(object sender, EventArgs e)
+        {
+            // Check if valid wave is selected
+            if (isValidWaveSelected)
+            {
+                // Get the point with the higher Y value
+                var higherPoint = startPoint.Y < currentPoint.Y ? startPoint : currentPoint;
+                // Increase the Y value of the higher point by the step size
+                higherPoint.Y += (int)stepSize;
+                // Refresh the chart
+                chart_stockData.Invalidate();
+            }
         }
     }
 }
