@@ -310,12 +310,14 @@ namespace StockAnalysisCS
             arrow.Height = isPeak ? -10 : 10;
             // Anchor the arrow to the specified DataPoint
             arrow.SetAnchor(dataPoint);
+            // Set the anchor offset y
+            arrow.AnchorOffsetY = -0.5;
 
             // If the candlestick is a valley
             if (!isPeak)
             {
                 // Adjust the arrow Y position to the low price of the candlestick
-                arrow.Y = (double)filteredCandlesticks[i].low;
+                arrow.Y = (double)filteredCandlesticks[i].low - 0.2;
             }
             // Add the arrow annotation to the chart
             chart_stockData.Annotations.Add(arrow);
@@ -648,14 +650,27 @@ namespace StockAnalysisCS
             // Declare a variable to store the hit test result of the mouse event
             HitTestResult hit = chart_stockData.HitTest(e.X, e.Y);
 
+            // Declare a variable to indicate if the mouse is clicked on an extreme candlestick
+            bool isHitAnExtreme = extremes.Any(extreme => extreme.index == hit.PointIndex);
+
+            // Reset the end point index of the rubber banding operation
+            endPointIdx = -1;
             // Set the index of the start point of the rubber banding operation
             startPointIdx = hit.PointIndex;
+            // Reset the boolean value to indicate if a valid wave is selected
+            isValidWaveSelected = false;
             // Set the start point of the rubber banding operation
             startPoint = e.Location;
             // Set the isDragging to true
             isDragging = true;
-            // Reset the boolean value to indicate if a valid wave is selected
-            isValidWaveSelected = false;
+            // Check if the clicked candlestick is not a peak or valley
+            if (!isHitAnExtreme)
+            {
+                // Set the isDragging to false
+                isDragging = false;
+                // Display an error message if the clicked candlestick is not a peak or valley
+                MessageBox.Show("You must select a peak or valley candlestick for the rubber-banding operation.");
+            }
         }
 
         /// <summary>
@@ -701,6 +716,7 @@ namespace StockAnalysisCS
             }
         }
 
+
         /// <summary>
         /// Function to handle the paint event of the chart
         /// </summary>
@@ -708,18 +724,18 @@ namespace StockAnalysisCS
         /// <param name="e">Event data</param>
         private void chart_stockData_Paint(object sender, PaintEventArgs e)
         {
+            // Loop through the confirmation annotations list
+            foreach (var annotation in confirmationAnnotations)
+            {
+                // Remove the existing confirmation annotations from the chart
+                chart_stockData.Annotations.Remove(annotation);
+            }
+            // Clear the confirmation annotations list
+            confirmationAnnotations.Clear();
+
             // Check if the user is dragging the mouse or a valid wave is selected
             if (isDragging || isValidWaveSelected)
             {
-                // Loop through the confirmation annotations list
-                foreach (var annotation in confirmationAnnotations)
-                {
-                    // Remove the existing confirmation annotations from the chart
-                    chart_stockData.Annotations.Remove(annotation);
-                }
-                // Clear the confirmation annotations list
-                confirmationAnnotations.Clear();
-
                 // Get the graphics object from the event
                 Graphics g = e.Graphics;
 
@@ -867,6 +883,18 @@ namespace StockAnalysisCS
                 isSimulating = true;
                 // Set the button_simulate text to "Stop"
                 button_simulate.Text = "Stop";
+
+                // Check if startPoint is higher than currentPoint
+                if (startPoint.Y < currentPoint.Y)
+                {
+                    // Move the start point down by 20%
+                    startPoint.Y = (int)(Math.Abs(startPoint.Y - currentPoint.Y)* 0.2) + startPoint.Y;
+                }
+                else
+                {
+                    // Move the current point down by 20%
+                    currentPoint.Y = (int)(Math.Abs(startPoint.Y - currentPoint.Y) * 0.2) + currentPoint.Y;
+                }
             } else
             {
                 // Set the isSimulating to false
@@ -887,12 +915,63 @@ namespace StockAnalysisCS
             // Check if valid wave is selected
             if (isValidWaveSelected)
             {
-                // Get the point with the higher Y value
-                var higherPoint = startPoint.Y < currentPoint.Y ? startPoint : currentPoint;
-                // Increase the Y value of the higher point by the step size
-                higherPoint.Y += (int)stepSize;
-                // Refresh the chart
-                chart_stockData.Invalidate();
+                // Check if startPoint is higher than currentPoint
+                if (startPoint.Y < currentPoint.Y)
+                {
+                    // Move the start point up
+                    startPoint.Y = Math.Max(startPoint.Y - (int)stepSize, 0);
+                } else
+                {
+                    // Move the current point up
+                    currentPoint.Y = Math.Max(currentPoint.Y - (int)stepSize, 0);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Function to handle the click event of the button_minus
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void button_minus_Click(object sender, EventArgs e)
+        {
+            // Check if valid wave is selected
+            if (isValidWaveSelected)
+            {
+                // Check if startPoint is higher than currentPoint
+                if (startPoint.Y < currentPoint.Y)
+                {
+                    // Move the start point down
+                    startPoint.Y += (int)stepSize;
+                }
+                else
+                {
+                    // Move the current point down
+                    currentPoint.Y += (int)stepSize;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Function to handle the tick event of the timer_simulate
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void timer_simulate_Tick(object sender, EventArgs e)
+        {
+            // Check if the simulation is running
+            if (isSimulating) { 
+            // Check if startPoint is higher than currentPoint
+            if (startPoint.Y < currentPoint.Y)
+            {
+                // Move the start point up
+                startPoint.Y = Math.Max(startPoint.Y - (int)stepSize, 0);
+            }
+            else
+            {
+                // Move the current point up
+                currentPoint.Y = Math.Max(currentPoint.Y - (int)stepSize, 0);
+            }
             }
         }
     }
