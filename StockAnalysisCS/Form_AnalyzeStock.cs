@@ -41,11 +41,18 @@ namespace StockAnalysisCS
         private bool isValidWaveSelected = false;
         // Declare a variable to store the confirmation annotations
         private List<EllipseAnnotation> confirmationAnnotations = null;
+        // Declare an array of Fibonacci levels
+        private double[] fibonnaciLevels = { 0.0, 0.236, 0.382, 0.5, 0.618, 0.764, 1.0 };
 
         // Declare a variable to store boolean value indicating if the simulation is running
         private bool isSimulating = false;
         // Declare a variable to store the step size for the simulation
         private double stepSize;
+        // Declare a variable to store the current step count for the simulation
+        private int currentStep = 0;
+        // Declare a variable to store the number of steps for the simulation
+        private const int numberOfSteps = 30;
+
 
         /// <summary>
         /// Function to initialize the form components and data members
@@ -408,6 +415,8 @@ namespace StockAnalysisCS
         {
             // Reset the isValidWaveSelected flag to false
             isValidWaveSelected = false;
+            // Clear confirmation annotations
+            confirmationAnnotations.Clear();
             // Display stock data based on the user-selected date range
             displayStockData();
             // Clear the selected wave in the comboBox_downWave
@@ -684,13 +693,10 @@ namespace StockAnalysisCS
             isDragging = false;
 
             // Check if the selected wave is valid
-            isValidWaveSelected = isValidWave();
-
-            // Check if the selected wave is valid
             if (isValidWaveSelected)
             {
                 // Set the step size for the simulation
-                stepSize = Math.Abs(currentPoint.X - startPoint.X) / 30;
+                stepSize = Math.Abs(currentPoint.Y - startPoint.Y) * 0.4 / numberOfSteps;
             }
         }
 
@@ -711,18 +717,19 @@ namespace StockAnalysisCS
                 currentPoint = e.Location;
                 // Set the end point index of the rubber banding operation
                 endPointIdx = hit.PointIndex;
+                // Check if the selected wave is valid
+                isValidWaveSelected = isValidWave();
+                // Annotate the confirmations in the chart
+                annotateConfirmations();
                 // Invalidate the chart to refresh the display
                 chart_stockData.Invalidate();
             }
         }
 
-
         /// <summary>
-        /// Function to handle the paint event of the chart
+        /// Function to annotate the confirmations in the chart
         /// </summary>
-        /// <param name="sender">The control that triggered the event</param>
-        /// <param name="e">Event data</param>
-        private void chart_stockData_Paint(object sender, PaintEventArgs e)
+        private void annotateConfirmations()
         {
             // Loop through the confirmation annotations list
             foreach (var annotation in confirmationAnnotations)
@@ -732,7 +739,86 @@ namespace StockAnalysisCS
             }
             // Clear the confirmation annotations list
             confirmationAnnotations.Clear();
+            // Check if the selected rectangle is a valid wave
+            if (isValidWaveSelected)
+            {
+                // Get the x of the rectangle
+                int x = startPoint.X;
+                // Get the y of the rectangle
+                int y = Math.Min(startPoint.Y, currentPoint.Y);
+                // Get the height of the rectangle
+                int height = Math.Abs(currentPoint.Y - startPoint.Y);
 
+                // Declare a list to store the Fibonacci prices
+                List<double> fibonnaciPrices = new List<double>();
+
+                // Loop through the Fibonacci levels
+                foreach (var level in fibonnaciLevels)
+                {
+                    // Calculate the y position of the Fibonacci level
+                    double levelY = y + level * height;
+                    // Add the Fibonacci level price to the list
+                    fibonnaciPrices.Add(chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY.PixelPositionToValue(levelY));
+                }
+
+                // Calculate the margin for the confirmations
+                var margin = Math.Abs(chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY.PixelPositionToValue(currentPoint.Y) - chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY.PixelPositionToValue(startPoint.Y)) * 0.015;
+
+                // Loop through the candlesticks in the selected wave
+                for (int i = startPointIdx; i <= endPointIdx; i++)
+                {
+                    // Get the candlestick at the current index
+                    var candlestick = filteredCandlesticks[i];
+                    // Declare a list to store the OHLC values
+                    List<decimal> ohlc = new List<decimal> { candlestick.open, candlestick.high, candlestick.low, candlestick.close };
+
+                    // Loop through the OHLC values
+                    foreach (double price in ohlc)
+                    {
+                        // Loop through the Fibonacci prices
+                        foreach (var fibonacciPrice in fibonnaciPrices)
+                        {
+                            // Check if the price is within the margin of the Fibonacci price
+                            if (price >= fibonacciPrice - margin && price <= fibonacciPrice + margin)
+                            {
+                                // Create a new EllipseAnnotation for the confirmation
+                                EllipseAnnotation confirmationAnnotation = new EllipseAnnotation
+                                {
+                                    // Set the axisX
+                                    AxisX = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisX,
+                                    // Set the axisY
+                                    AxisY = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY,
+                                    // Set the anchor data point
+                                    AnchorDataPoint = chart_stockData.Series["Series_OHLC"].Points[i],
+                                    // Set the Y position
+                                    Y = (double)price,
+                                    // Set the width
+                                    Width = 0.6,
+                                    // Set the height
+                                    Height = 1.2,
+                                    // Set the background color
+                                    BackColor = Color.Yellow,
+                                    // Set the anchor alignment
+                                    AnchorAlignment = ContentAlignment.MiddleCenter,
+                                };
+                                // Add the confirmation annotation to the list
+                                confirmationAnnotations.Add(confirmationAnnotation);
+                                // Add the confirmation annotation to the chart
+                                chart_stockData.Annotations.Add(confirmationAnnotation);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Function to handle the paint event of the chart
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void chart_stockData_Paint(object sender, PaintEventArgs e)
+        {
             // Check if the user is dragging the mouse or a valid wave is selected
             if (isDragging || isValidWaveSelected)
             {
@@ -747,9 +833,6 @@ namespace StockAnalysisCS
                 int width = Math.Abs(currentPoint.X - startPoint.X);
                 // Get the height of the rectangle
                 int height = Math.Abs(currentPoint.Y - startPoint.Y);
-
-                // Check if the enclosing rectangle is valid wave
-                bool isRectangleValidWave = isValidWave();
 
                 // Declare pen to draw the rectangle
                 using (var pen = new Pen(Color.Red, 2))
@@ -774,19 +857,17 @@ namespace StockAnalysisCS
                     }
                 }
                 // Declare brush to fill the rectangle
-                using (var fillBrush = new SolidBrush(Color.FromArgb(35, (isRectangleValidWave) ? (Color.Green) : (Color.Red))))
+                using (var fillBrush = new SolidBrush(Color.FromArgb(35, (isValidWaveSelected) ? (Color.Green) : (Color.Red))))
                 {
                     // Fill the rectangle on the chart
                     g.FillRectangle(fillBrush, x, y, width, height);
                 }
 
                 // Check if the selected rectangle is a valid wave
-                if (isRectangleValidWave)
+                if (isValidWaveSelected)
                 {
                     // Check if the selected wave is a down wave
                     bool isDownWave = filteredCandlesticks[startPointIdx].high > filteredCandlesticks[endPointIdx].high;
-                    // Declare an array of Fibonacci levels
-                    decimal[] fibonnaciLevels = { 0.0M, 0.236M, 0.382M, 0.5M, 0.618M, 0.764M, 1.0M };
                     // Declare a list to store the Fibonacci prices
                     List<double> fibonnaciPrices = new List<double>();
 
@@ -814,55 +895,6 @@ namespace StockAnalysisCS
                             g.DrawString(label, levelFont, Brushes.Black, x + width + 5, levelY - 10);
                         }
                     }
-
-                    // Calculate the margin for the confirmations
-                    var margin = Math.Abs(chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY.PixelPositionToValue(currentPoint.Y) - chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY.PixelPositionToValue(startPoint.Y)) * 0.015;
-
-                    // Loop through the candlesticks in the selected wave
-                    for (int i = startPointIdx; i <= endPointIdx; i++)
-                    {
-                        // Get the candlestick at the current index
-                        var candlestick = filteredCandlesticks[i];
-                        // Declare a list to store the OHLC values
-                        List<decimal> ohlc = new List<decimal> { candlestick.open, candlestick.high, candlestick.low, candlestick.close };
-
-                        // Loop through the OHLC values
-                        foreach (double price in ohlc)
-                        {
-                            // Loop through the Fibonacci prices
-                            foreach (var fibonacciPrice in fibonnaciPrices)
-                            {
-                                // Check if the price is within the margin of the Fibonacci price
-                                if (price >= fibonacciPrice - margin && price <= fibonacciPrice + margin)
-                                {
-                                    // Create a new EllipseAnnotation for the confirmation
-                                    EllipseAnnotation confirmationAnnotation = new EllipseAnnotation
-                                    {
-                                        // Set the axisX
-                                        AxisX = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisX,
-                                        // Set the axisY
-                                        AxisY = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY,
-                                        // Set the anchor data point
-                                        AnchorDataPoint = chart_stockData.Series["Series_OHLC"].Points[i],
-                                        // Set the Y position
-                                        Y = (double)price,
-                                        // Set the width
-                                        Width = 0.6,
-                                        // Set the height
-                                        Height = 1.2,
-                                        // Set the background color
-                                        BackColor = Color.Yellow,
-                                        // Set the anchor alignment
-                                        AnchorAlignment = ContentAlignment.MiddleCenter,
-                                    };
-                                    // Add the confirmation annotation to the list
-                                    confirmationAnnotations.Add(confirmationAnnotation);
-                                    // Add the confirmation annotation to the chart
-                                    //chart_stockData.Annotations.Add(confirmationAnnotation);
-                                }
-                            }
-                        }
-                    }
                 }
             }
             // Set the label_confirmationsCount text to display the number of confirmations
@@ -887,15 +919,20 @@ namespace StockAnalysisCS
                 // Check if startPoint is higher than currentPoint
                 if (startPoint.Y < currentPoint.Y)
                 {
-                    // Move the start point down by 20%
-                    startPoint.Y = (int)(Math.Abs(startPoint.Y - currentPoint.Y) * 0.2) + startPoint.Y;
+                    // Move the start point down
+                    startPoint.Y += (int)stepSize * (numberOfSteps/2);
                 }
                 else
                 {
-                    // Move the current point down by 20%
-                    currentPoint.Y = (int)(Math.Abs(startPoint.Y - currentPoint.Y) * 0.2) + currentPoint.Y;
+                    // Move the current point down
+                    currentPoint.Y += (int)stepSize * (numberOfSteps/2);
                 }
+                // Annotate the confirmations in the chart
+                annotateConfirmations();
+                // Invalidate the chart to refresh the display
+                chart_stockData.Invalidate();
             }
+            // Check if the simulation is running
             else
             {
                 // Set the isSimulating to false
@@ -922,11 +959,14 @@ namespace StockAnalysisCS
                     // Move the start point up
                     startPoint.Y = Math.Max(startPoint.Y - (int)stepSize, 0);
                 }
+                // Check if currentPoint is higher than startPoint
                 else
                 {
                     // Move the current point up
                     currentPoint.Y = Math.Max(currentPoint.Y - (int)stepSize, 0);
                 }
+                // Annotate the confirmations in the chart
+                annotateConfirmations();
                 // Invalidate the chart to refresh the display
                 chart_stockData.Invalidate();
             }
@@ -948,11 +988,14 @@ namespace StockAnalysisCS
                     // Move the start point down
                     startPoint.Y += (int)stepSize;
                 }
+                // Check if currentPoint is higher than startPoint
                 else
                 {
                     // Move the current point down
                     currentPoint.Y += (int)stepSize;
                 }
+                // Annotate the confirmations in the chart
+                annotateConfirmations();
                 // Invalidate the chart to refresh the display
                 chart_stockData.Invalidate();
             }
@@ -968,6 +1011,9 @@ namespace StockAnalysisCS
             // Check if the simulation is running
             if (isSimulating)
             {
+                // Check if the current step is less than the number of steps
+                if (currentStep < numberOfSteps)
+                {
                 // Check if startPoint is higher than currentPoint
                 if (startPoint.Y < currentPoint.Y)
                 {
@@ -979,8 +1025,21 @@ namespace StockAnalysisCS
                     // Move the current point up
                     currentPoint.Y = Math.Max(currentPoint.Y - (int)stepSize, 0);
                 }
+                // Increment the current step
+                currentStep++;
+                // Annotate the confirmations in the chart
+                annotateConfirmations();
                 // Invalidate the chart to refresh the display
                 chart_stockData.Invalidate();
+                } else
+                {
+                    // Stop the simulation
+                    isSimulating = false;
+                    // Set the button_simulate text to "Start"
+                    button_simulate.Text = "Start";
+                    // Reset the current step
+                    currentStep = 0;
+                }
             }
         }
     }

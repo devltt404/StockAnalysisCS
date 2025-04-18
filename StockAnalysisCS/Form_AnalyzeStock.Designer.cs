@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.button_loadTicker = new System.Windows.Forms.Button();
             this.openFileDialog_loadTicker = new System.Windows.Forms.OpenFileDialog();
             this.dateTimePicker_startDate = new System.Windows.Forms.DateTimePicker();
@@ -61,9 +61,10 @@
             this.button_loadTicker.BackColor = System.Drawing.Color.MediumBlue;
             this.button_loadTicker.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_loadTicker.ForeColor = System.Drawing.Color.White;
-            this.button_loadTicker.Location = new System.Drawing.Point(51, 22);
+            this.button_loadTicker.Location = new System.Drawing.Point(34, 14);
+            this.button_loadTicker.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button_loadTicker.Name = "button_loadTicker";
-            this.button_loadTicker.Size = new System.Drawing.Size(202, 69);
+            this.button_loadTicker.Size = new System.Drawing.Size(135, 45);
             this.button_loadTicker.TabIndex = 0;
             this.button_loadTicker.Text = "Load Ticker";
             this.button_loadTicker.UseVisualStyleBackColor = false;
@@ -81,17 +82,19 @@
             // 
             // dateTimePicker_startDate
             // 
-            this.dateTimePicker_startDate.Location = new System.Drawing.Point(146, 106);
+            this.dateTimePicker_startDate.Location = new System.Drawing.Point(97, 69);
+            this.dateTimePicker_startDate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dateTimePicker_startDate.Name = "dateTimePicker_startDate";
-            this.dateTimePicker_startDate.Size = new System.Drawing.Size(272, 26);
+            this.dateTimePicker_startDate.Size = new System.Drawing.Size(183, 20);
             this.dateTimePicker_startDate.TabIndex = 1;
             this.dateTimePicker_startDate.Value = new System.DateTime(2023, 1, 1, 0, 0, 0, 0);
             // 
             // dateTimePicker_endDate
             // 
-            this.dateTimePicker_endDate.Location = new System.Drawing.Point(146, 157);
+            this.dateTimePicker_endDate.Location = new System.Drawing.Point(97, 102);
+            this.dateTimePicker_endDate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dateTimePicker_endDate.Name = "dateTimePicker_endDate";
-            this.dateTimePicker_endDate.Size = new System.Drawing.Size(272, 26);
+            this.dateTimePicker_endDate.Size = new System.Drawing.Size(183, 20);
             this.dateTimePicker_endDate.TabIndex = 2;
             // 
             // label_startDate
@@ -99,7 +102,8 @@
             this.label_startDate.AutoSize = true;
             this.label_startDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_startDate.ForeColor = System.Drawing.Color.Black;
-            this.label_startDate.Location = new System.Drawing.Point(48, 109);
+            this.label_startDate.Location = new System.Drawing.Point(32, 71);
+            this.label_startDate.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_startDate.Name = "label_startDate";
             this.label_startDate.Size = new System.Drawing.Size(61, 15);
             this.label_startDate.TabIndex = 3;
@@ -110,7 +114,8 @@
             this.label_endDate.AutoSize = true;
             this.label_endDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_endDate.ForeColor = System.Drawing.Color.Black;
-            this.label_endDate.Location = new System.Drawing.Point(48, 158);
+            this.label_endDate.Location = new System.Drawing.Point(32, 103);
+            this.label_endDate.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_endDate.Name = "label_endDate";
             this.label_endDate.Size = new System.Drawing.Size(58, 15);
             this.label_endDate.TabIndex = 4;
@@ -118,32 +123,33 @@
             // 
             // chart_stockData
             // 
-            chartArea1.Name = "ChartArea_OHLC";
-            chartArea2.AlignWithChartArea = "ChartArea_OHLC";
-            chartArea2.Name = "ChartArea_Volume";
-            this.chart_stockData.ChartAreas.Add(chartArea1);
-            this.chart_stockData.ChartAreas.Add(chartArea2);
-            this.chart_stockData.Location = new System.Drawing.Point(51, 209);
+            chartArea7.Name = "ChartArea_OHLC";
+            chartArea8.AlignWithChartArea = "ChartArea_OHLC";
+            chartArea8.Name = "ChartArea_Volume";
+            this.chart_stockData.ChartAreas.Add(chartArea7);
+            this.chart_stockData.ChartAreas.Add(chartArea8);
+            this.chart_stockData.Location = new System.Drawing.Point(34, 136);
+            this.chart_stockData.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.chart_stockData.Name = "chart_stockData";
-            series1.ChartArea = "ChartArea_OHLC";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick;
-            series1.CustomProperties = "PriceDownColor=Red, PriceUpColor=Green";
-            series1.IsXValueIndexed = true;
-            series1.Name = "Series_OHLC";
-            series1.XValueMember = "Date";
-            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
-            series1.YValueMembers = "High,Low,Open,Close";
-            series1.YValuesPerPoint = 4;
-            series2.ChartArea = "ChartArea_Volume";
-            series2.IsXValueIndexed = true;
-            series2.Name = "Series_Volume";
-            series2.XValueMember = "Date";
-            series2.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
-            series2.YValueMembers = "Volume";
-            series2.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
-            this.chart_stockData.Series.Add(series1);
-            this.chart_stockData.Series.Add(series2);
-            this.chart_stockData.Size = new System.Drawing.Size(1526, 748);
+            series7.ChartArea = "ChartArea_OHLC";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick;
+            series7.CustomProperties = "PriceDownColor=Red, PriceUpColor=Green";
+            series7.IsXValueIndexed = true;
+            series7.Name = "Series_OHLC";
+            series7.XValueMember = "Date";
+            series7.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
+            series7.YValueMembers = "High,Low,Open,Close";
+            series7.YValuesPerPoint = 4;
+            series8.ChartArea = "ChartArea_Volume";
+            series8.IsXValueIndexed = true;
+            series8.Name = "Series_Volume";
+            series8.XValueMember = "Date";
+            series8.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
+            series8.YValueMembers = "Volume";
+            series8.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
+            this.chart_stockData.Series.Add(series7);
+            this.chart_stockData.Series.Add(series8);
+            this.chart_stockData.Size = new System.Drawing.Size(1017, 486);
             this.chart_stockData.TabIndex = 5;
             this.chart_stockData.Text = "chart_stockData";
             this.chart_stockData.Paint += new System.Windows.Forms.PaintEventHandler(this.chart_stockData_Paint);
@@ -153,12 +159,11 @@
             // 
             // trackBar_peakValleyMargin
             // 
-            this.trackBar_peakValleyMargin.Location = new System.Drawing.Point(608, 138);
-            this.trackBar_peakValleyMargin.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.trackBar_peakValleyMargin.Location = new System.Drawing.Point(405, 90);
             this.trackBar_peakValleyMargin.Maximum = 4;
             this.trackBar_peakValleyMargin.Minimum = 1;
             this.trackBar_peakValleyMargin.Name = "trackBar_peakValleyMargin";
-            this.trackBar_peakValleyMargin.Size = new System.Drawing.Size(212, 45);
+            this.trackBar_peakValleyMargin.Size = new System.Drawing.Size(141, 45);
             this.trackBar_peakValleyMargin.TabIndex = 6;
             this.trackBar_peakValleyMargin.Value = 4;
             this.trackBar_peakValleyMargin.ValueChanged += new System.EventHandler(this.trackBar_peakValleyMargin_ValueChanged);
@@ -166,10 +171,9 @@
             // label_peakValleyMargin
             // 
             this.label_peakValleyMargin.AutoSize = true;
-            this.label_peakValleyMargin.Location = new System.Drawing.Point(616, 102);
-            this.label_peakValleyMargin.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_peakValleyMargin.Location = new System.Drawing.Point(411, 66);
             this.label_peakValleyMargin.Name = "label_peakValleyMargin";
-            this.label_peakValleyMargin.Size = new System.Drawing.Size(160, 20);
+            this.label_peakValleyMargin.Size = new System.Drawing.Size(112, 13);
             this.label_peakValleyMargin.TabIndex = 7;
             this.label_peakValleyMargin.Text = "Peak/Valley Margin: 4";
             // 
@@ -178,10 +182,9 @@
             this.button_refresh.BackColor = System.Drawing.SystemColors.Highlight;
             this.button_refresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_refresh.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.button_refresh.Location = new System.Drawing.Point(608, 22);
-            this.button_refresh.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button_refresh.Location = new System.Drawing.Point(405, 14);
             this.button_refresh.Name = "button_refresh";
-            this.button_refresh.Size = new System.Drawing.Size(140, 60);
+            this.button_refresh.Size = new System.Drawing.Size(93, 39);
             this.button_refresh.TabIndex = 8;
             this.button_refresh.Text = "Refresh";
             this.button_refresh.UseVisualStyleBackColor = false;
@@ -190,36 +193,40 @@
             // comboBox_upWave
             // 
             this.comboBox_upWave.FormattingEnabled = true;
-            this.comboBox_upWave.Location = new System.Drawing.Point(874, 54);
+            this.comboBox_upWave.Location = new System.Drawing.Point(583, 35);
+            this.comboBox_upWave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.comboBox_upWave.Name = "comboBox_upWave";
-            this.comboBox_upWave.Size = new System.Drawing.Size(240, 28);
+            this.comboBox_upWave.Size = new System.Drawing.Size(161, 21);
             this.comboBox_upWave.TabIndex = 9;
             this.comboBox_upWave.SelectedIndexChanged += new System.EventHandler(this.comboBox_upWave_SelectedIndexChanged);
             // 
             // label_upWave
             // 
             this.label_upWave.AutoSize = true;
-            this.label_upWave.Location = new System.Drawing.Point(870, 22);
+            this.label_upWave.Location = new System.Drawing.Point(580, 14);
+            this.label_upWave.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_upWave.Name = "label_upWave";
-            this.label_upWave.Size = new System.Drawing.Size(75, 20);
+            this.label_upWave.Size = new System.Drawing.Size(54, 13);
             this.label_upWave.TabIndex = 10;
             this.label_upWave.Text = "UP Wave";
             // 
             // label_downWave
             // 
             this.label_downWave.AutoSize = true;
-            this.label_downWave.Location = new System.Drawing.Point(870, 102);
+            this.label_downWave.Location = new System.Drawing.Point(580, 66);
+            this.label_downWave.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_downWave.Name = "label_downWave";
-            this.label_downWave.Size = new System.Drawing.Size(103, 20);
+            this.label_downWave.Size = new System.Drawing.Size(74, 13);
             this.label_downWave.TabIndex = 11;
             this.label_downWave.Text = "DOWN Wave";
             // 
             // comboBox_downWave
             // 
             this.comboBox_downWave.FormattingEnabled = true;
-            this.comboBox_downWave.Location = new System.Drawing.Point(874, 138);
+            this.comboBox_downWave.Location = new System.Drawing.Point(583, 90);
+            this.comboBox_downWave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.comboBox_downWave.Name = "comboBox_downWave";
-            this.comboBox_downWave.Size = new System.Drawing.Size(240, 28);
+            this.comboBox_downWave.Size = new System.Drawing.Size(161, 21);
             this.comboBox_downWave.TabIndex = 12;
             this.comboBox_downWave.SelectedIndexChanged += new System.EventHandler(this.comboBox_downWave_SelectedIndexChanged);
             // 
@@ -227,7 +234,8 @@
             // 
             this.label_confirmationsCount.AutoSize = true;
             this.label_confirmationsCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_confirmationsCount.Location = new System.Drawing.Point(1292, 163);
+            this.label_confirmationsCount.Location = new System.Drawing.Point(861, 106);
+            this.label_confirmationsCount.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label_confirmationsCount.Name = "label_confirmationsCount";
             this.label_confirmationsCount.Size = new System.Drawing.Size(190, 16);
             this.label_confirmationsCount.TabIndex = 13;
@@ -235,9 +243,11 @@
             // 
             // button_simulate
             // 
-            this.button_simulate.Location = new System.Drawing.Point(1167, 44);
+            this.button_simulate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.button_simulate.Location = new System.Drawing.Point(924, 52);
+            this.button_simulate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button_simulate.Name = "button_simulate";
-            this.button_simulate.Size = new System.Drawing.Size(119, 47);
+            this.button_simulate.Size = new System.Drawing.Size(80, 34);
             this.button_simulate.TabIndex = 14;
             this.button_simulate.Text = "Start";
             this.button_simulate.UseVisualStyleBackColor = true;
@@ -245,10 +255,11 @@
             // 
             // button_plus
             // 
-            this.button_plus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.button_plus.Location = new System.Drawing.Point(1318, 44);
+            this.button_plus.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.button_plus.Location = new System.Drawing.Point(878, 52);
+            this.button_plus.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button_plus.Name = "button_plus";
-            this.button_plus.Size = new System.Drawing.Size(40, 40);
+            this.button_plus.Size = new System.Drawing.Size(34, 34);
             this.button_plus.TabIndex = 15;
             this.button_plus.Text = "+";
             this.button_plus.UseVisualStyleBackColor = true;
@@ -256,10 +267,11 @@
             // 
             // button_minus
             // 
-            this.button_minus.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.button_minus.Location = new System.Drawing.Point(1373, 44);
+            this.button_minus.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.button_minus.Location = new System.Drawing.Point(1017, 52);
+            this.button_minus.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.button_minus.Name = "button_minus";
-            this.button_minus.Size = new System.Drawing.Size(40, 40);
+            this.button_minus.Size = new System.Drawing.Size(34, 34);
             this.button_minus.TabIndex = 16;
             this.button_minus.Text = "-";
             this.button_minus.UseVisualStyleBackColor = true;
@@ -273,9 +285,9 @@
             // 
             // Form_AnalyzeStock
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1642, 991);
+            this.ClientSize = new System.Drawing.Size(1095, 644);
             this.Controls.Add(this.button_minus);
             this.Controls.Add(this.button_plus);
             this.Controls.Add(this.button_simulate);
@@ -293,7 +305,6 @@
             this.Controls.Add(this.dateTimePicker_endDate);
             this.Controls.Add(this.dateTimePicker_startDate);
             this.Controls.Add(this.button_loadTicker);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form_AnalyzeStock";
             this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
             this.Text = "Analyze Stock";
