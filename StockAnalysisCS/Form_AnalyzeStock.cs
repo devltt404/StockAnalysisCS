@@ -858,7 +858,7 @@ namespace StockAnalysisCS
                                     // Add the confirmation annotation to the list
                                     confirmationAnnotations.Add(confirmationAnnotation);
                                     // Add the confirmation annotation to the chart
-                                    chart_stockData.Annotations.Add(confirmationAnnotation);
+                                    //chart_stockData.Annotations.Add(confirmationAnnotation);
                                 }
                             }
                         }
@@ -888,14 +888,15 @@ namespace StockAnalysisCS
                 if (startPoint.Y < currentPoint.Y)
                 {
                     // Move the start point down by 20%
-                    startPoint.Y = (int)(Math.Abs(startPoint.Y - currentPoint.Y)* 0.2) + startPoint.Y;
+                    startPoint.Y = (int)(Math.Abs(startPoint.Y - currentPoint.Y) * 0.2) + startPoint.Y;
                 }
                 else
                 {
                     // Move the current point down by 20%
                     currentPoint.Y = (int)(Math.Abs(startPoint.Y - currentPoint.Y) * 0.2) + currentPoint.Y;
                 }
-            } else
+            }
+            else
             {
                 // Set the isSimulating to false
                 isSimulating = false;
@@ -920,11 +921,14 @@ namespace StockAnalysisCS
                 {
                     // Move the start point up
                     startPoint.Y = Math.Max(startPoint.Y - (int)stepSize, 0);
-                } else
+                }
+                else
                 {
                     // Move the current point up
                     currentPoint.Y = Math.Max(currentPoint.Y - (int)stepSize, 0);
                 }
+                // Invalidate the chart to refresh the display
+                chart_stockData.Invalidate();
             }
         }
 
@@ -949,6 +953,8 @@ namespace StockAnalysisCS
                     // Move the current point down
                     currentPoint.Y += (int)stepSize;
                 }
+                // Invalidate the chart to refresh the display
+                chart_stockData.Invalidate();
             }
         }
 
@@ -960,18 +966,21 @@ namespace StockAnalysisCS
         private void timer_simulate_Tick(object sender, EventArgs e)
         {
             // Check if the simulation is running
-            if (isSimulating) { 
-            // Check if startPoint is higher than currentPoint
-            if (startPoint.Y < currentPoint.Y)
+            if (isSimulating)
             {
-                // Move the start point up
-                startPoint.Y = Math.Max(startPoint.Y - (int)stepSize, 0);
-            }
-            else
-            {
-                // Move the current point up
-                currentPoint.Y = Math.Max(currentPoint.Y - (int)stepSize, 0);
-            }
+                // Check if startPoint is higher than currentPoint
+                if (startPoint.Y < currentPoint.Y)
+                {
+                    // Move the start point up
+                    startPoint.Y = Math.Max(startPoint.Y - (int)stepSize, 0);
+                }
+                else
+                {
+                    // Move the current point up
+                    currentPoint.Y = Math.Max(currentPoint.Y - (int)stepSize, 0);
+                }
+                // Invalidate the chart to refresh the display
+                chart_stockData.Invalidate();
             }
         }
     }
