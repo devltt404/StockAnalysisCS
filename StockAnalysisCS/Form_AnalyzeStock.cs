@@ -432,6 +432,8 @@ namespace StockAnalysisCS
             comboBox_downWave.Text = "";
             // Clear the selected wave in the comboBox_upWave
             comboBox_upWave.Text = "";
+            // Stop simulation
+            stopSimulation();
         }
 
 
