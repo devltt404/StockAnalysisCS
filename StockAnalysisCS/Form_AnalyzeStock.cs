@@ -76,6 +76,10 @@ namespace StockAnalysisCS
             downWaves = new List<Wave>();
             // Initialize the confirmation annotations list
             confirmationAnnotations = new List<EllipseAnnotation>();
+            // Clear the selected wave in the comboBox_downWave
+            comboBox_downWave.Text = "";
+            // Clear the selected wave in the comboBox_upWave
+            comboBox_upWave.Text = "";
             // Reset the isValidWaveSelected flag to false
             isValidWaveSelected = false;
         }
