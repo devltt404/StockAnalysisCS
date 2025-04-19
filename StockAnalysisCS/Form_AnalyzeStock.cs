@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -41,6 +42,8 @@ namespace StockAnalysisCS
         private bool isValidWaveSelected = false;
         // Declare a variable to store the confirmation annotations
         private List<EllipseAnnotation> confirmationAnnotations = null;
+        // Declare a variable to check if the selected wave is up
+        private bool isSelectUpWave = false;
         // Declare an array of Fibonacci levels
         private double[] fibonnaciLevels = { 0.0, 0.236, 0.382, 0.5, 0.618, 0.764, 1.0 };
 
@@ -73,6 +76,8 @@ namespace StockAnalysisCS
             downWaves = new List<Wave>();
             // Initialize the confirmation annotations list
             confirmationAnnotations = new List<EllipseAnnotation>();
+            // Reset the isValidWaveSelected flag to false
+            isValidWaveSelected = false;
         }
 
         public Form_AnalyzeStock()
@@ -489,9 +494,10 @@ namespace StockAnalysisCS
             {
                 // Get the selected up wave
                 Wave selectedWave = upWaves[comboBox_upWave.SelectedIndex];
-
-                // Draw the up wave
-                addWaveAnnotation(selectedWave, true);
+                // Set the isSelectUpWave flag to true
+                isSelectUpWave = true;
+                // Handle the selected up wave
+                handleSelectWave(selectedWave);
             }
         }
 
@@ -507,113 +513,47 @@ namespace StockAnalysisCS
             {
                 // Get the selected down wave
                 Wave selectedWave = downWaves[comboBox_downWave.SelectedIndex];
-
-                // Draw the down wave
-                addWaveAnnotation(selectedWave, false);
+                // Set the isSelectUpWave flag to false
+                isSelectUpWave = false;
+                // Handle the selected down wave
+                handleSelectWave(selectedWave);
             }
         }
 
         /// <summary>
-        /// Function to add wave annotation to the chart
+        /// Function to handle the event when the user selects a wave from the comboBox_downWave
         /// </summary>
-        /// <param name="wave">The selected wave object</param>
-        /// <param name="isUp">Boolean value indicating if the wave is an up wave</param>
-        private void addWaveAnnotation(Wave wave, bool isUp)
+        /// <param name="selectedWave">The selected wave</param>
+        private void handleSelectWave(Wave selectedWave)
         {
-            // Clear existing wave annotations in the chart
-            foreach (var annotation in chart_stockData.Annotations.ToList())
-            {
-                // Check if wave is up
-                if (isUp)
-                {
-                    /// Check if the annotation is an up wave rectangle or line
-                    if (annotation.Name == "Up_Wave_Rectangle" || annotation.Name == "Up_Wave_Line")
-                    {
-                        // Remove the annotation from the chart
-                        chart_stockData.Annotations.Remove(annotation);
-                    }
-                }
-                // Check if wave is down
-                else
-                {
-                    /// Check if the annotation is a down wave rectangle or line
-                    if (annotation.Name == "Down_Wave_Rectangle" || annotation.Name == "Down_Wave_Line")
-                    {
-                        // Remove the annotation from the chart
-                        chart_stockData.Annotations.Remove(annotation);
-                    }
-                }
-            }
-
-            // Set the color of up wave to green and down wave to red
-            var color = isUp ? Color.Green : Color.Red;
-
             // Get the x axis of the chart
             var axisX = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisX;
             // Get the y axis of the chart
             var axisY = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY;
-            // Get the x position of the wave annotation
-            var x = wave.startIndex + 1;
-            // Get the width of the wave annotation
-            var width = axisX.ValueToPosition(wave.endIndex) - axisX.ValueToPosition(wave.startIndex);
-            // Get the height of the wave annotation
-            var height = axisY.ValueToPosition((double)wave.endPrice) - axisY.ValueToPosition((double)wave.startPrice);
-            // Get the y position of the wave annotation
-            var y = (double)wave.startPrice;
 
-            // Create rectangle annotation for the wave
-            RectangleAnnotation rect = new RectangleAnnotation();
-            // Set the name of the rectangle annotation
-            rect.Name = isUp ? "Up_Wave_Rectangle" : "Down_Wave_Rectangle";
-            // Set the X axis of the rectangle annotation to the chart's X axis
-            rect.AxisX = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisX;
-            // Set the Y axis of the rectangle annotation to the chart's Y axis
-            rect.AxisY = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY;
-            // Set the color of the rectangle annotation
-            rect.LineColor = color;
-            // Set the width of the rectangle annotation
-            rect.LineWidth = 2;
-            // Set the background color of the rectangle annotation
-            rect.BackColor = Color.FromArgb(35, color);
-            // Enable annotation to overlap with other annotations
-            rect.SmartLabelStyle.Enabled = false;
-            // Set the X position of the rectangle annotation
-            rect.X = x;
-            // Set the width of the rectangle annotation
-            rect.Width = width;
-            // Set the height of the rectangle annotation
-            rect.Height = height;
-            // Set the Y position of the rectangle annotation
-            rect.Y = y;
+            // Get the start index of the selected wave
+            startPointIdx = selectedWave.startIndex;
+            // Create a new point for the start point of the wave
+            startPoint = new Point();
+            // Set the x position of the start point
+            startPoint.X = (int)axisX.ValueToPixelPosition(startPointIdx + 1);
+            // Set the y position of the start point
+            startPoint.Y = (int)axisY.ValueToPixelPosition((double)selectedWave.startPrice);
+            // Get the end index of the selected wave
+            endPointIdx = selectedWave.endIndex;
+            // Create a new point for the end point of the wave
+            currentPoint = new Point();
+            // Set the x position of the end point
+            currentPoint.X = (int)axisX.ValueToPixelPosition(endPointIdx + 1);
+            // Set the y position of the end point
+            currentPoint.Y = (int)axisY.ValueToPixelPosition((double)selectedWave.endPrice);
+            // Set the isValidWaveSelected flag to true
+            isValidWaveSelected = true;
 
-            // Create diagonal line annotation
-            LineAnnotation line = new LineAnnotation();
-            // Set line name
-            line.Name = isUp ? "Up_Wave_Line" : "Down_Wave_Line";
-            // Set line X axis to chart X axis
-            line.AxisX = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisX;
-            // Set line Y axis to chart Y axis
-            line.AxisY = chart_stockData.ChartAreas["ChartArea_OHLC"].AxisY;
-            // Set line color
-            line.LineColor = color;
-            // Set line width
-            line.LineWidth = 2;
-            // Enable annotation to overlap with other annotations
-            line.SmartLabelStyle.Enabled = false;
-            // Set the line x position
-            line.X = x;
-            // Set the line width
-            line.Width = width;
-            // Set the line height
-            line.Height = height;
-            // Set the line y position
-            line.Y = y;
-
-            // Add rectangle annotation to the chart
-            chart_stockData.Annotations.Add(rect);
-            // Add line annotation to the chart
-            chart_stockData.Annotations.Add(line);
-
+            // Set the step size for the simulation
+            stepSize = Math.Abs(currentPoint.Y - startPoint.Y) * 0.4 / numberOfSteps;
+            // Annotate the confirmations
+            annotateConfirmations();
             // Refresh the chart
             chart_stockData.Invalidate();
         }
@@ -639,11 +579,26 @@ namespace StockAnalysisCS
             }
             else
             {
-                // Check if the selected wave is valid
-                bool isWaveExist = upWaves.Any(wave => wave.startIndex == startCandlestickIdx && wave.endIndex == endCandlestickIdx) ||
-                                   downWaves.Any(wave => wave.startIndex == startCandlestickIdx && wave.endIndex == endCandlestickIdx);
-                // Return the result
-                return isWaveExist;
+                // Check if the selected wave is an up wave
+                if (upWaves.Any(wave => wave.startIndex == startCandlestickIdx && wave.endIndex == endCandlestickIdx))
+                {
+                    // Set the isSelectUpWave to true
+                    isSelectUpWave = true;
+                    // Return true
+                    return true;
+                }
+
+                // Check if the selected wave is a down wave
+                if (downWaves.Any(wave => wave.startIndex == startCandlestickIdx && wave.endIndex == endCandlestickIdx))
+                {
+                    // Set the isSelectUpWave to false
+                    isSelectUpWave = false;
+                    // Return true
+                    return true;
+                }
+
+                // Return false if the selected wave is not valid
+                return false;
             }
         }
 
@@ -856,8 +811,10 @@ namespace StockAnalysisCS
                         g.DrawLine(pen, x, y, x + width, y + height);
                     }
                 }
+                // Declare brush color based on selected wave
+                var brushColor = (!isValidWaveSelected) ? Color.Yellow : (isSelectUpWave ? Color.Green : Color.Red);
                 // Declare brush to fill the rectangle
-                using (var fillBrush = new SolidBrush(Color.FromArgb(35, (isValidWaveSelected) ? (Color.Green) : (Color.Red))))
+                using (var fillBrush = new SolidBrush(Color.FromArgb(35, brushColor)))
                 {
                     // Fill the rectangle on the chart
                     g.FillRectangle(fillBrush, x, y, width, height);
@@ -915,18 +872,12 @@ namespace StockAnalysisCS
                 isSimulating = true;
                 // Set the button_simulate text to "Stop"
                 button_simulate.Text = "Stop";
-
-                // Check if startPoint is higher than currentPoint
-                if (startPoint.Y < currentPoint.Y)
-                {
-                    // Move the start point down
-                    startPoint.Y += (int)stepSize * (numberOfSteps/2);
-                }
-                else
-                {
-                    // Move the current point down
-                    currentPoint.Y += (int)stepSize * (numberOfSteps/2);
-                }
+                // Move the current point down
+                currentPoint.Y += (int)(stepSize * (numberOfSteps / 2));
+                // Disable the button_plus
+                button_plus.Enabled = false;
+                // Disable the button_minus
+                button_minus.Enabled = false;
                 // Annotate the confirmations in the chart
                 annotateConfirmations();
                 // Invalidate the chart to refresh the display
@@ -935,11 +886,8 @@ namespace StockAnalysisCS
             // Check if the simulation is running
             else
             {
-                // Set the isSimulating to false
-                isSimulating = false;
-                // Set the button_simulate text to "Start"
-                button_simulate.Text = "Start";
-
+                // Stop the simulation
+                stopSimulation();
             }
         }
 
@@ -953,18 +901,8 @@ namespace StockAnalysisCS
             // Check if valid wave is selected
             if (isValidWaveSelected)
             {
-                // Check if startPoint is higher than currentPoint
-                if (startPoint.Y < currentPoint.Y)
-                {
-                    // Move the start point up
-                    startPoint.Y = Math.Max(startPoint.Y - (int)stepSize, 0);
-                }
-                // Check if currentPoint is higher than startPoint
-                else
-                {
-                    // Move the current point up
-                    currentPoint.Y = Math.Max(currentPoint.Y - (int)stepSize, 0);
-                }
+                // Move the current point up
+                currentPoint.Y = Math.Max((int)(currentPoint.Y - stepSize), 0);
                 // Annotate the confirmations in the chart
                 annotateConfirmations();
                 // Invalidate the chart to refresh the display
@@ -982,18 +920,9 @@ namespace StockAnalysisCS
             // Check if valid wave is selected
             if (isValidWaveSelected)
             {
-                // Check if startPoint is higher than currentPoint
-                if (startPoint.Y < currentPoint.Y)
-                {
-                    // Move the start point down
-                    startPoint.Y += (int)stepSize;
-                }
-                // Check if currentPoint is higher than startPoint
-                else
-                {
-                    // Move the current point down
-                    currentPoint.Y += (int)stepSize;
-                }
+                // Move the current point down
+                currentPoint.Y = (int)(currentPoint.Y + stepSize);
+
                 // Annotate the confirmations in the chart
                 annotateConfirmations();
                 // Invalidate the chart to refresh the display
@@ -1014,33 +943,45 @@ namespace StockAnalysisCS
                 // Check if the current step is less than the number of steps
                 if (currentStep < numberOfSteps)
                 {
-                // Check if startPoint is higher than currentPoint
-                if (startPoint.Y < currentPoint.Y)
-                {
-                    // Move the start point up
-                    startPoint.Y = Math.Max(startPoint.Y - (int)stepSize, 0);
+                    // Move the current point up
+                    currentPoint.Y = Math.Max((int)(currentPoint.Y - stepSize), 0);
+                    // Check if the current point Y is 0
+                    if (currentPoint.Y == 0)
+                    {
+                        // Stop the simulation
+                        stopSimulation();
+                    }
+                    // Increment the current step
+                    currentStep++;
+                    // Annotate the confirmations in the chart
+                    annotateConfirmations();
+                    // Invalidate the chart to refresh the display
+                    chart_stockData.Invalidate();
                 }
+                // Else if the current step is greater than or equal to the number of steps
                 else
                 {
-                    // Move the current point up
-                    currentPoint.Y = Math.Max(currentPoint.Y - (int)stepSize, 0);
-                }
-                // Increment the current step
-                currentStep++;
-                // Annotate the confirmations in the chart
-                annotateConfirmations();
-                // Invalidate the chart to refresh the display
-                chart_stockData.Invalidate();
-                } else
-                {
                     // Stop the simulation
-                    isSimulating = false;
-                    // Set the button_simulate text to "Start"
-                    button_simulate.Text = "Start";
-                    // Reset the current step
-                    currentStep = 0;
+                    stopSimulation();
                 }
             }
+        }
+
+        /// <summary>
+        /// Function to stop the simulation
+        /// </summary>
+        private void stopSimulation()
+        {
+            // Stop the simulation
+            isSimulating = false;
+            // Set the button_simulate text to "Start"
+            button_simulate.Text = "Start";
+            // Enable the button_plus
+            button_plus.Enabled = true;
+            // Enable the button_minus
+            button_minus.Enabled = true;
+            // Reset the current step
+            currentStep = 0;
         }
     }
 }
