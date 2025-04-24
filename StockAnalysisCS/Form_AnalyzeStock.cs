@@ -880,6 +880,8 @@ namespace StockAnalysisCS
                 button_simulate.Text = "Stop";
                 // Move the current point down
                 currentPoint.Y += (int)(stepSize * (numberOfSteps / 2));
+                // Start the timer
+                timer_simulate.Start();
                 // Disable the button_plus
                 button_plus.Enabled = false;
                 // Disable the button_minus
@@ -943,9 +945,6 @@ namespace StockAnalysisCS
         /// <param name="e">Event data</param>
         private void timer_simulate_Tick(object sender, EventArgs e)
         {
-            // Check if the simulation is running
-            if (isSimulating)
-            {
                 // Check if the current step is less than the number of steps
                 if (currentStep < numberOfSteps)
                 {
@@ -970,7 +969,7 @@ namespace StockAnalysisCS
                     // Stop the simulation
                     stopSimulation();
                 }
-            }
+            
         }
 
         /// <summary>
@@ -980,6 +979,8 @@ namespace StockAnalysisCS
         {
             // Stop the simulation
             isSimulating = false;
+            // Stop the timer
+            timer_simulate.Stop();
             // Set the button_simulate text to "Start"
             button_simulate.Text = "Start";
             // Enable the button_plus
