@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.button_loadTicker = new System.Windows.Forms.Button();
             this.openFileDialog_loadTicker = new System.Windows.Forms.OpenFileDialog();
             this.dateTimePicker_startDate = new System.Windows.Forms.DateTimePicker();
@@ -125,31 +125,31 @@
             // 
             // chart_stockData
             // 
-            chartArea5.Name = "ChartArea_OHLC";
-            chartArea6.AlignWithChartArea = "ChartArea_OHLC";
-            chartArea6.Name = "ChartArea_Volume";
-            this.chart_stockData.ChartAreas.Add(chartArea5);
-            this.chart_stockData.ChartAreas.Add(chartArea6);
+            chartArea1.Name = "ChartArea_OHLC";
+            chartArea2.AlignWithChartArea = "ChartArea_OHLC";
+            chartArea2.Name = "ChartArea_Volume";
+            this.chart_stockData.ChartAreas.Add(chartArea1);
+            this.chart_stockData.ChartAreas.Add(chartArea2);
             this.chart_stockData.Location = new System.Drawing.Point(51, 209);
             this.chart_stockData.Name = "chart_stockData";
-            series5.ChartArea = "ChartArea_OHLC";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick;
-            series5.CustomProperties = "PriceDownColor=Red, PriceUpColor=Green";
-            series5.IsXValueIndexed = true;
-            series5.Name = "Series_OHLC";
-            series5.XValueMember = "Date";
-            series5.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
-            series5.YValueMembers = "High,Low,Open,Close";
-            series5.YValuesPerPoint = 4;
-            series6.ChartArea = "ChartArea_Volume";
-            series6.IsXValueIndexed = true;
-            series6.Name = "Series_Volume";
-            series6.XValueMember = "Date";
-            series6.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
-            series6.YValueMembers = "Volume";
-            series6.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
-            this.chart_stockData.Series.Add(series5);
-            this.chart_stockData.Series.Add(series6);
+            series1.ChartArea = "ChartArea_OHLC";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick;
+            series1.CustomProperties = "PriceDownColor=Red, PriceUpColor=Green";
+            series1.IsXValueIndexed = true;
+            series1.Name = "Series_OHLC";
+            series1.XValueMember = "Date";
+            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
+            series1.YValueMembers = "High,Low,Open,Close";
+            series1.YValuesPerPoint = 4;
+            series2.ChartArea = "ChartArea_Volume";
+            series2.IsXValueIndexed = true;
+            series2.Name = "Series_Volume";
+            series2.XValueMember = "Date";
+            series2.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
+            series2.YValueMembers = "Volume";
+            series2.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
+            this.chart_stockData.Series.Add(series1);
+            this.chart_stockData.Series.Add(series2);
             this.chart_stockData.Size = new System.Drawing.Size(1526, 748);
             this.chart_stockData.TabIndex = 5;
             this.chart_stockData.Text = "chart_stockData";
@@ -275,7 +275,6 @@
             // 
             // timer_simulate
             // 
-            this.timer_simulate.Enabled = true;
             this.timer_simulate.Interval = 1000;
             this.timer_simulate.Tick += new System.EventHandler(this.timer_simulate_Tick);
             // 
