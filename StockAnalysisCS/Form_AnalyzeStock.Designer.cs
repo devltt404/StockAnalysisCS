@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.button_loadTicker = new System.Windows.Forms.Button();
             this.openFileDialog_loadTicker = new System.Windows.Forms.OpenFileDialog();
             this.dateTimePicker_startDate = new System.Windows.Forms.DateTimePicker();
@@ -125,31 +125,31 @@
             // 
             // chart_stockData
             // 
-            chartArea3.Name = "ChartArea_OHLC";
-            chartArea4.AlignWithChartArea = "ChartArea_OHLC";
-            chartArea4.Name = "ChartArea_Volume";
-            this.chart_stockData.ChartAreas.Add(chartArea3);
-            this.chart_stockData.ChartAreas.Add(chartArea4);
+            chartArea5.Name = "ChartArea_OHLC";
+            chartArea6.AlignWithChartArea = "ChartArea_OHLC";
+            chartArea6.Name = "ChartArea_Volume";
+            this.chart_stockData.ChartAreas.Add(chartArea5);
+            this.chart_stockData.ChartAreas.Add(chartArea6);
             this.chart_stockData.Location = new System.Drawing.Point(51, 209);
             this.chart_stockData.Name = "chart_stockData";
-            series3.ChartArea = "ChartArea_OHLC";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick;
-            series3.CustomProperties = "PriceDownColor=Red, PriceUpColor=Green";
-            series3.IsXValueIndexed = true;
-            series3.Name = "Series_OHLC";
-            series3.XValueMember = "Date";
-            series3.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
-            series3.YValueMembers = "High,Low,Open,Close";
-            series3.YValuesPerPoint = 4;
-            series4.ChartArea = "ChartArea_Volume";
-            series4.IsXValueIndexed = true;
-            series4.Name = "Series_Volume";
-            series4.XValueMember = "Date";
-            series4.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
-            series4.YValueMembers = "Volume";
-            series4.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
-            this.chart_stockData.Series.Add(series3);
-            this.chart_stockData.Series.Add(series4);
+            series5.ChartArea = "ChartArea_OHLC";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick;
+            series5.CustomProperties = "PriceDownColor=Red, PriceUpColor=Green";
+            series5.IsXValueIndexed = true;
+            series5.Name = "Series_OHLC";
+            series5.XValueMember = "Date";
+            series5.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
+            series5.YValueMembers = "High,Low,Open,Close";
+            series5.YValuesPerPoint = 4;
+            series6.ChartArea = "ChartArea_Volume";
+            series6.IsXValueIndexed = true;
+            series6.Name = "Series_Volume";
+            series6.XValueMember = "Date";
+            series6.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
+            series6.YValueMembers = "Volume";
+            series6.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
+            this.chart_stockData.Series.Add(series5);
+            this.chart_stockData.Series.Add(series6);
             this.chart_stockData.Size = new System.Drawing.Size(1526, 748);
             this.chart_stockData.TabIndex = 5;
             this.chart_stockData.Text = "chart_stockData";
@@ -288,15 +288,16 @@
             this.trackBar_range.Size = new System.Drawing.Size(242, 69);
             this.trackBar_range.TabIndex = 17;
             this.trackBar_range.Value = 20;
+            this.trackBar_range.Scroll += new System.EventHandler(this.trackBar_range_Scroll);
             // 
             // label_range
             // 
             this.label_range.AutoSize = true;
             this.label_range.Location = new System.Drawing.Point(1027, 22);
             this.label_range.Name = "label_range";
-            this.label_range.Size = new System.Drawing.Size(138, 20);
+            this.label_range.Size = new System.Drawing.Size(160, 20);
             this.label_range.TabIndex = 18;
-            this.label_range.Text = "Percent of Range:";
+            this.label_range.Text = "Percent of Range: 20";
             // 
             // trackBar_steps
             // 
@@ -308,15 +309,16 @@
             this.trackBar_steps.TabIndex = 19;
             this.trackBar_steps.TickFrequency = 2;
             this.trackBar_steps.Value = 30;
+            this.trackBar_steps.Scroll += new System.EventHandler(this.trackBar_steps_Scroll);
             // 
             // label_steps
             // 
             this.label_steps.AutoSize = true;
             this.label_steps.Location = new System.Drawing.Point(1031, 109);
             this.label_steps.Name = "label_steps";
-            this.label_steps.Size = new System.Drawing.Size(133, 20);
+            this.label_steps.Size = new System.Drawing.Size(155, 20);
             this.label_steps.TabIndex = 20;
-            this.label_steps.Text = "Number of Steps:";
+            this.label_steps.Text = "Number of Steps: 30";
             // 
             // Form_AnalyzeStock
             // 

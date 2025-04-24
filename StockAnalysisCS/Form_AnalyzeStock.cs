@@ -972,8 +972,7 @@ namespace StockAnalysisCS
                 {
                     // Stop the simulation
                     stopSimulation();
-                }
-            
+                }   
         }
 
         /// <summary>
@@ -993,6 +992,28 @@ namespace StockAnalysisCS
             button_minus.Enabled = true;
             // Reset the current step
             currentStep = 0;
+        }
+
+        /// <summary>
+        /// Function to handle the scroll event of the trackBar_range
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void trackBar_range_Scroll(object sender, EventArgs e)
+        {
+            // Set the label_range text to display the current value of the range
+            label_range.Text = "Percent of Range: " + trackBar_range.Value;
+        }
+
+        /// <summary>
+        /// Function to handle the scroll event of the trackBar_steps
+        /// </summary>
+        /// <param name="sender">The control that triggered the event</param>
+        /// <param name="e">Event data</param>
+        private void trackBar_steps_Scroll(object sender, EventArgs e)
+        {
+            // Set the label_steps text to display the current value of the steps
+            label_steps.Text = "Number of Steps: " + trackBar_steps.Value;
         }
     }
 }
