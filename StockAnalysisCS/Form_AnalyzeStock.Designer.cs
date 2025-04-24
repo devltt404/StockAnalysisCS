@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.button_loadTicker = new System.Windows.Forms.Button();
             this.openFileDialog_loadTicker = new System.Windows.Forms.OpenFileDialog();
             this.dateTimePicker_startDate = new System.Windows.Forms.DateTimePicker();
@@ -52,8 +52,14 @@
             this.button_plus = new System.Windows.Forms.Button();
             this.button_minus = new System.Windows.Forms.Button();
             this.timer_simulate = new System.Windows.Forms.Timer(this.components);
+            this.trackBar_range = new System.Windows.Forms.TrackBar();
+            this.label_range = new System.Windows.Forms.Label();
+            this.trackBar_steps = new System.Windows.Forms.TrackBar();
+            this.label_steps = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart_stockData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_peakValleyMargin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_range)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_steps)).BeginInit();
             this.SuspendLayout();
             // 
             // button_loadTicker
@@ -119,31 +125,31 @@
             // 
             // chart_stockData
             // 
-            chartArea7.Name = "ChartArea_OHLC";
-            chartArea8.AlignWithChartArea = "ChartArea_OHLC";
-            chartArea8.Name = "ChartArea_Volume";
-            this.chart_stockData.ChartAreas.Add(chartArea7);
-            this.chart_stockData.ChartAreas.Add(chartArea8);
+            chartArea3.Name = "ChartArea_OHLC";
+            chartArea4.AlignWithChartArea = "ChartArea_OHLC";
+            chartArea4.Name = "ChartArea_Volume";
+            this.chart_stockData.ChartAreas.Add(chartArea3);
+            this.chart_stockData.ChartAreas.Add(chartArea4);
             this.chart_stockData.Location = new System.Drawing.Point(51, 209);
             this.chart_stockData.Name = "chart_stockData";
-            series7.ChartArea = "ChartArea_OHLC";
-            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick;
-            series7.CustomProperties = "PriceDownColor=Red, PriceUpColor=Green";
-            series7.IsXValueIndexed = true;
-            series7.Name = "Series_OHLC";
-            series7.XValueMember = "Date";
-            series7.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
-            series7.YValueMembers = "High,Low,Open,Close";
-            series7.YValuesPerPoint = 4;
-            series8.ChartArea = "ChartArea_Volume";
-            series8.IsXValueIndexed = true;
-            series8.Name = "Series_Volume";
-            series8.XValueMember = "Date";
-            series8.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
-            series8.YValueMembers = "Volume";
-            series8.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
-            this.chart_stockData.Series.Add(series7);
-            this.chart_stockData.Series.Add(series8);
+            series3.ChartArea = "ChartArea_OHLC";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Candlestick;
+            series3.CustomProperties = "PriceDownColor=Red, PriceUpColor=Green";
+            series3.IsXValueIndexed = true;
+            series3.Name = "Series_OHLC";
+            series3.XValueMember = "Date";
+            series3.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
+            series3.YValueMembers = "High,Low,Open,Close";
+            series3.YValuesPerPoint = 4;
+            series4.ChartArea = "ChartArea_Volume";
+            series4.IsXValueIndexed = true;
+            series4.Name = "Series_Volume";
+            series4.XValueMember = "Date";
+            series4.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Date;
+            series4.YValueMembers = "Volume";
+            series4.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.UInt64;
+            this.chart_stockData.Series.Add(series3);
+            this.chart_stockData.Series.Add(series4);
             this.chart_stockData.Size = new System.Drawing.Size(1526, 748);
             this.chart_stockData.TabIndex = 5;
             this.chart_stockData.Text = "chart_stockData";
@@ -154,7 +160,7 @@
             // 
             // trackBar_peakValleyMargin
             // 
-            this.trackBar_peakValleyMargin.Location = new System.Drawing.Point(608, 138);
+            this.trackBar_peakValleyMargin.Location = new System.Drawing.Point(456, 138);
             this.trackBar_peakValleyMargin.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.trackBar_peakValleyMargin.Maximum = 4;
             this.trackBar_peakValleyMargin.Minimum = 1;
@@ -167,7 +173,7 @@
             // label_peakValleyMargin
             // 
             this.label_peakValleyMargin.AutoSize = true;
-            this.label_peakValleyMargin.Location = new System.Drawing.Point(616, 102);
+            this.label_peakValleyMargin.Location = new System.Drawing.Point(464, 102);
             this.label_peakValleyMargin.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_peakValleyMargin.Name = "label_peakValleyMargin";
             this.label_peakValleyMargin.Size = new System.Drawing.Size(160, 20);
@@ -179,7 +185,7 @@
             this.button_refresh.BackColor = System.Drawing.SystemColors.Highlight;
             this.button_refresh.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_refresh.ForeColor = System.Drawing.SystemColors.HighlightText;
-            this.button_refresh.Location = new System.Drawing.Point(608, 22);
+            this.button_refresh.Location = new System.Drawing.Point(456, 22);
             this.button_refresh.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.button_refresh.Name = "button_refresh";
             this.button_refresh.Size = new System.Drawing.Size(140, 60);
@@ -191,7 +197,7 @@
             // comboBox_upWave
             // 
             this.comboBox_upWave.FormattingEnabled = true;
-            this.comboBox_upWave.Location = new System.Drawing.Point(874, 54);
+            this.comboBox_upWave.Location = new System.Drawing.Point(722, 54);
             this.comboBox_upWave.Name = "comboBox_upWave";
             this.comboBox_upWave.Size = new System.Drawing.Size(240, 28);
             this.comboBox_upWave.TabIndex = 9;
@@ -200,7 +206,7 @@
             // label_upWave
             // 
             this.label_upWave.AutoSize = true;
-            this.label_upWave.Location = new System.Drawing.Point(870, 22);
+            this.label_upWave.Location = new System.Drawing.Point(718, 22);
             this.label_upWave.Name = "label_upWave";
             this.label_upWave.Size = new System.Drawing.Size(75, 20);
             this.label_upWave.TabIndex = 10;
@@ -209,7 +215,7 @@
             // label_downWave
             // 
             this.label_downWave.AutoSize = true;
-            this.label_downWave.Location = new System.Drawing.Point(870, 102);
+            this.label_downWave.Location = new System.Drawing.Point(718, 102);
             this.label_downWave.Name = "label_downWave";
             this.label_downWave.Size = new System.Drawing.Size(103, 20);
             this.label_downWave.TabIndex = 11;
@@ -218,7 +224,7 @@
             // comboBox_downWave
             // 
             this.comboBox_downWave.FormattingEnabled = true;
-            this.comboBox_downWave.Location = new System.Drawing.Point(874, 138);
+            this.comboBox_downWave.Location = new System.Drawing.Point(722, 138);
             this.comboBox_downWave.Name = "comboBox_downWave";
             this.comboBox_downWave.Size = new System.Drawing.Size(240, 28);
             this.comboBox_downWave.TabIndex = 12;
@@ -273,11 +279,54 @@
             this.timer_simulate.Interval = 1000;
             this.timer_simulate.Tick += new System.EventHandler(this.timer_simulate_Tick);
             // 
+            // trackBar_range
+            // 
+            this.trackBar_range.Location = new System.Drawing.Point(1019, 53);
+            this.trackBar_range.Maximum = 100;
+            this.trackBar_range.Minimum = 1;
+            this.trackBar_range.Name = "trackBar_range";
+            this.trackBar_range.Size = new System.Drawing.Size(242, 69);
+            this.trackBar_range.TabIndex = 17;
+            this.trackBar_range.Value = 20;
+            // 
+            // label_range
+            // 
+            this.label_range.AutoSize = true;
+            this.label_range.Location = new System.Drawing.Point(1027, 22);
+            this.label_range.Name = "label_range";
+            this.label_range.Size = new System.Drawing.Size(138, 20);
+            this.label_range.TabIndex = 18;
+            this.label_range.Text = "Percent of Range:";
+            // 
+            // trackBar_steps
+            // 
+            this.trackBar_steps.Location = new System.Drawing.Point(1019, 138);
+            this.trackBar_steps.Maximum = 100;
+            this.trackBar_steps.Minimum = 2;
+            this.trackBar_steps.Name = "trackBar_steps";
+            this.trackBar_steps.Size = new System.Drawing.Size(242, 69);
+            this.trackBar_steps.TabIndex = 19;
+            this.trackBar_steps.TickFrequency = 2;
+            this.trackBar_steps.Value = 30;
+            // 
+            // label_steps
+            // 
+            this.label_steps.AutoSize = true;
+            this.label_steps.Location = new System.Drawing.Point(1031, 109);
+            this.label_steps.Name = "label_steps";
+            this.label_steps.Size = new System.Drawing.Size(133, 20);
+            this.label_steps.TabIndex = 20;
+            this.label_steps.Text = "Number of Steps:";
+            // 
             // Form_AnalyzeStock
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1642, 991);
+            this.Controls.Add(this.label_steps);
+            this.Controls.Add(this.trackBar_steps);
+            this.Controls.Add(this.label_range);
+            this.Controls.Add(this.trackBar_range);
             this.Controls.Add(this.button_minus);
             this.Controls.Add(this.button_plus);
             this.Controls.Add(this.button_simulate);
@@ -301,6 +350,8 @@
             this.Text = "Analyze Stock";
             ((System.ComponentModel.ISupportInitialize)(this.chart_stockData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_peakValleyMargin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_range)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_steps)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -327,6 +378,10 @@
         private System.Windows.Forms.Button button_plus;
         private System.Windows.Forms.Button button_minus;
         private System.Windows.Forms.Timer timer_simulate;
+        private System.Windows.Forms.TrackBar trackBar_range;
+        private System.Windows.Forms.Label label_range;
+        private System.Windows.Forms.TrackBar trackBar_steps;
+        private System.Windows.Forms.Label label_steps;
     }
 }
 

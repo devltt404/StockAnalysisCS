@@ -53,8 +53,6 @@ namespace StockAnalysisCS
         private double stepSize;
         // Declare a variable to store the current step count for the simulation
         private int currentStep = 0;
-        // Declare a variable to store the number of steps for the simulation
-        private const int numberOfSteps = 30;
 
 
         /// <summary>
@@ -557,7 +555,7 @@ namespace StockAnalysisCS
             isValidWaveSelected = true;
 
             // Set the step size for the simulation
-            stepSize = Math.Abs(currentPoint.Y - startPoint.Y) * 0.4 / numberOfSteps;
+            stepSize = Math.Abs(currentPoint.Y - startPoint.Y) * (trackBar_range.Value / 100.0 * 2) / trackBar_steps.Value;
             // Annotate the confirmations
             annotateConfirmations();
             // Refresh the chart
@@ -657,7 +655,7 @@ namespace StockAnalysisCS
             if (isValidWaveSelected)
             {
                 // Set the step size for the simulation
-                stepSize = Math.Abs(currentPoint.Y - startPoint.Y) * 0.4 / numberOfSteps;
+                stepSize = Math.Abs(currentPoint.Y - startPoint.Y) * (trackBar_range.Value / 100.0 * 2) / trackBar_steps.Value;
             }
         }
 
@@ -878,8 +876,10 @@ namespace StockAnalysisCS
                 isSimulating = true;
                 // Set the button_simulate text to "Stop"
                 button_simulate.Text = "Stop";
+                // Set the step size for the simulation
+                stepSize = Math.Abs(currentPoint.Y - startPoint.Y) * (trackBar_range.Value / 100.0 * 2) / trackBar_steps.Value;
                 // Move the current point down
-                currentPoint.Y += (int)(stepSize * (numberOfSteps / 2));
+                currentPoint.Y += (int)(stepSize * (trackBar_steps.Value / 2));
                 // Start the timer
                 timer_simulate.Start();
                 // Disable the button_plus
@@ -909,6 +909,8 @@ namespace StockAnalysisCS
             // Check if valid wave is selected
             if (isValidWaveSelected)
             {
+                // Set the step size for the simulation
+                stepSize = Math.Abs(currentPoint.Y - startPoint.Y) * (trackBar_range.Value / 100.0 * 2) / trackBar_steps.Value;
                 // Move the current point up
                 currentPoint.Y = Math.Max((int)(currentPoint.Y - stepSize), 0);
                 // Annotate the confirmations in the chart
@@ -928,6 +930,8 @@ namespace StockAnalysisCS
             // Check if valid wave is selected
             if (isValidWaveSelected)
             {
+                // Set the step size for the simulation
+                stepSize = Math.Abs(currentPoint.Y - startPoint.Y) * (trackBar_range.Value / 100.0 * 2) / trackBar_steps.Value;
                 // Move the current point down
                 currentPoint.Y = (int)(currentPoint.Y + stepSize);
 
@@ -946,7 +950,7 @@ namespace StockAnalysisCS
         private void timer_simulate_Tick(object sender, EventArgs e)
         {
                 // Check if the current step is less than the number of steps
-                if (currentStep < numberOfSteps)
+                if (currentStep < trackBar_steps.Value)
                 {
                     // Move the current point up
                     currentPoint.Y = Math.Max((int)(currentPoint.Y - stepSize), 0);
