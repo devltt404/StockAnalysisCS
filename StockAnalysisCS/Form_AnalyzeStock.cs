@@ -872,6 +872,9 @@ namespace StockAnalysisCS
             // Check if the simulation is not running
             if (!isSimulating)
             {
+                // Check if the selected wave is valid
+                if (isValidWaveSelected)
+                {
                 // Set the isSimulating to true
                 isSimulating = true;
                 // Set the button_simulate text to "Stop"
@@ -890,6 +893,7 @@ namespace StockAnalysisCS
                 annotateConfirmations();
                 // Invalidate the chart to refresh the display
                 chart_stockData.Invalidate();
+                }
             }
             // Check if the simulation is running
             else
@@ -933,7 +937,7 @@ namespace StockAnalysisCS
                 // Set the step size for the simulation
                 stepSize = Math.Abs(currentPoint.Y - startPoint.Y) * (trackBar_range.Value / 100.0 * 2) / trackBar_steps.Value;
                 // Move the current point down
-                currentPoint.Y = (int)(currentPoint.Y + stepSize);
+                currentPoint.Y = (int)(currentPoint.Y + Math.Ceiling(stepSize));
 
                 // Annotate the confirmations in the chart
                 annotateConfirmations();
